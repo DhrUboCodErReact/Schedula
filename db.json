@@ -1,0 +1,321 @@
+{
+  "users": [
+    {
+      "id": "3750",
+      "name": "Dhrubajyoti Das",
+      "email": "info.dhrubojyoti@gmail.com",
+      "password": "Dhrubo@7432",
+      "phone": "7432941371"
+    },
+    {
+      "id": "f726",
+      "name": "Dhrubajyoti Das",
+      "email": "info.dhrubojyoti@gmail.com",
+      "password": "Dhrubo@7432",
+      "phone": "7432941371"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "1",
+      "name": "Dr. Ayesha Khan",
+      "speciality": "Orthopedic",
+      "location": "Hyderabad",
+      "price": 1030,
+      "rating": 4.6,
+      "experience": 14,
+      "availableDates": [
+        "2025-07-28",
+        "2025-07-26",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "17:30",
+        "17:30",
+        "17:00"
+      ],
+      "image": "/images/doctor02.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Dr. Ravi Verma",
+      "speciality": "Cardiologist",
+      "location": "Mumbai",
+      "price": 1742,
+      "rating": 4.4,
+      "experience": 10,
+      "availableDates": [
+        "2025-07-29",
+        "2025-07-27",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "17:30",
+        "11:30",
+        "15:30"
+      ],
+      "image": "/images/doctor01.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Dr. Neha Singh",
+      "speciality": "Psychiatrist",
+      "location": "Ahmedabad",
+      "price": 1143,
+      "rating": 4.8,
+      "experience": 20,
+      "availableDates": [
+        "2025-07-28",
+        "2025-07-26",
+        "2025-07-26"
+      ],
+      "availableTimes": [
+        "17:30",
+        "13:30",
+        "11:00"
+      ],
+      "image": "/images/doctor03.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Dr. Arjun Patel",
+      "speciality": "Gynecologist",
+      "location": "Pune",
+      "price": 1896,
+      "rating": 4.7,
+      "experience": 14,
+      "availableDates": [
+        "2025-07-27",
+        "2025-07-25",
+        "2025-07-25"
+      ],
+      "availableTimes": [
+        "9:30",
+        "14:00",
+        "9:30"
+      ],
+      "image": "/images/doctor01.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Dr. Meera Sharma",
+      "speciality": "General Physician",
+      "location": "Mumbai",
+      "price": 1767,
+      "rating": 4.5,
+      "experience": 8,
+      "availableDates": [
+        "2025-07-29",
+        "2025-07-27",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "15:30",
+        "18:00",
+        "10:30"
+      ],
+      "image": "/images/doctor03.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Dr. Sanjay Reddy",
+      "speciality": "Dermatologist",
+      "location": "Bangalore",
+      "price": 1350,
+      "rating": 4.3,
+      "experience": 11,
+      "availableDates": [
+        "2025-07-30",
+        "2025-07-28",
+        "2025-07-31"
+      ],
+      "availableTimes": [
+        "10:00",
+        "14:30",
+        "17:00"
+      ],
+      "image": "/images/doctor02.jpg"
+    },
+    {
+      "id": "7",
+      "name": "Dr. Anjali Das",
+      "speciality": "ENT Specialist",
+      "location": "Chennai",
+      "price": 1190,
+      "rating": 4.6,
+      "experience": 9,
+      "availableDates": [
+        "2025-07-29",
+        "2025-07-27",
+        "2025-07-30"
+      ],
+      "availableTimes": [
+        "12:00",
+        "16:00",
+        "10:30"
+      ],
+      "image": "/images/doctor01.jpg"
+    },
+    {
+      "id": "8",
+      "name": "Dr. Kunal Mehta",
+      "speciality": "Urologist",
+      "location": "Delhi",
+      "price": 1980,
+      "rating": 4.2,
+      "experience": 15,
+      "availableDates": [
+        "2025-07-26",
+        "2025-07-28",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "11:00",
+        "13:30",
+        "17:30"
+      ],
+      "image": "/images/doctor03.jpg"
+    },
+    {
+      "id": "9",
+      "name": "Dr. Sneha Roy",
+      "speciality": "Neurologist",
+      "location": "Kolkata",
+      "price": 2100,
+      "rating": 4.9,
+      "experience": 18,
+      "availableDates": [
+        "2025-07-30",
+        "2025-07-31",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "10:00",
+        "15:00",
+        "17:00"
+      ],
+      "image": "/images/doctor02.jpg"
+    },
+    {
+      "id": "10",
+      "name": "Dr. Varun Joshi",
+      "speciality": "Pediatrician",
+      "location": "Surat",
+      "price": 950,
+      "rating": 4.4,
+      "experience": 6,
+      "availableDates": [
+        "2025-07-28",
+        "2025-07-29",
+        "2025-07-30"
+      ],
+      "availableTimes": [
+        "9:00",
+        "13:00",
+        "17:30"
+      ],
+      "image": "/images/doctor01.jpg"
+    },
+    {
+      "id": "11",
+      "name": "Dr. Pooja Nair",
+      "speciality": "Oncologist",
+      "location": "Nagpur",
+      "price": 2300,
+      "rating": 4.7,
+      "experience": 12,
+      "availableDates": [
+        "2025-07-27",
+        "2025-07-28",
+        "2025-07-30"
+      ],
+      "availableTimes": [
+        "10:30",
+        "14:00",
+        "16:30"
+      ],
+      "image": "/images/doctor03.jpg"
+    },
+    {
+      "id": "12",
+      "name": "Dr. Alok Sharma",
+      "speciality": "Nephrologist",
+      "location": "Indore",
+      "price": 1780,
+      "rating": 4.5,
+      "experience": 13,
+      "availableDates": [
+        "2025-07-28",
+        "2025-07-30",
+        "2025-07-31"
+      ],
+      "availableTimes": [
+        "11:30",
+        "16:00",
+        "18:00"
+      ],
+      "image": "/images/doctor02.jpg"
+    },
+    {
+      "id": "13",
+      "name": "Dr. Isha Jain",
+      "speciality": "Rheumatologist",
+      "location": "Chandigarh",
+      "price": 1550,
+      "rating": 4.3,
+      "experience": 10,
+      "availableDates": [
+        "2025-07-26",
+        "2025-07-27",
+        "2025-07-29"
+      ],
+      "availableTimes": [
+        "9:30",
+        "11:30",
+        "13:30"
+      ],
+      "image": "/images/doctor01.jpg"
+    },
+    {
+      "id": "14",
+      "name": "Dr. Tarun Bansal",
+      "speciality": "Pulmonologist",
+      "location": "Jaipur",
+      "price": 1650,
+      "rating": 4.6,
+      "experience": 16,
+      "availableDates": [
+        "2025-07-29",
+        "2025-07-31",
+        "2025-08-01"
+      ],
+      "availableTimes": [
+        "10:00",
+        "15:00",
+        "17:30"
+      ],
+      "image": "/images/doctor03.jpg"
+    },
+    {
+      "id": "15",
+      "name": "Dr. Ritu Sinha",
+      "speciality": "Endocrinologist",
+      "location": "Lucknow",
+      "price": 1820,
+      "rating": 4.5,
+      "experience": 11,
+      "availableDates": [
+        "2025-07-28",
+        "2025-07-29",
+        "2025-07-30"
+      ],
+      "availableTimes": [
+        "11:00",
+        "14:30",
+        "16:00"
+      ],
+      "image": "/images/doctor02.jpg"
+    }
+  ],
+  "appointments": []
+}
