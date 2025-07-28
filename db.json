@@ -1,18 +1,17 @@
 {
   "users": [
     {
-      "id": "3750",
+      "id": "dbf6",
       "name": "Dhrubajyoti Das",
       "email": "info.dhrubojyoti@gmail.com",
       "password": "Dhrubo@7432",
-      "phone": "7432941371"
-    },
-    {
-      "id": "f726",
-      "name": "Dhrubajyoti Das",
-      "email": "info.dhrubojyoti@gmail.com",
-      "password": "Dhrubo@7432",
-      "phone": "7432941371"
+      "phone": "07432941371",
+      "age": "25",
+      "gender": "Male",
+      "bloodGroup": "A+",
+      "medicalConditions": [],
+      "allergies": [],
+      "prescriptions": []
     }
   ],
   "doctors": [
@@ -315,7 +314,57 @@
         "16:00"
       ],
       "image": "/images/doctor02.jpg"
+    },
+    {
+      "id": "4bab",
+      "name": "Dhrubajyoti Das",
+      "email": "info.dhrubojyoti@gmail.com",
+      "password": "Dhrubo@7432",
+      "phone": "+917432941371",
+      "qualification": "MD (Doctor of Medicine)",
+      "speciality": "Chest",
+      "location": "West Bengal",
+      "experience": "6",
+      "availableDates": [
+        "2025-07-27",
+        "2025-08-01",
+        "2025-08-03",
+        "2025-08-08",
+        "2025-08-10",
+        "2025-08-15",
+        "2025-08-17",
+        "2025-08-17",
+        "2025-08-22"
+      ],
+      "availableTimes": [
+        "05:30",
+        "07:30",
+        "05:30",
+        "07:30",
+        "05:30"
+      ],
+      "price": "600",
+      "slotTypes": [
+        {
+          "type": "wave",
+          "booked": 3,
+          "max": 10
+        }
+      ]
     }
   ],
-  "appointments": []
+  "appointments": [
+    {
+      "id": "ea6f",
+      "doctorId": "4bab",
+      "date": "2025-07-29",
+      "time": "07:30"
+    },
+    {
+      "id": "8f29",
+      "doctorId": "4bab",
+      "date": "2025-08-01",
+      "time": "07:30"
+    }
+  ]
 }

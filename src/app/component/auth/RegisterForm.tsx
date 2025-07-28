@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+//* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState } from 'react'
@@ -37,18 +38,32 @@ export default function RegisterForm() {
         return
       }
 
+      const newUser = {
+        ...formData,
+        id: crypto.randomUUID().slice(0, 4), // short unique ID
+        age: null,
+        gender: '',
+        bloodGroup: '',
+        medicalConditions: [],
+        allergies: [],
+        prescriptions: [],
+      }
+
       const res = await fetch('http://localhost:3001/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(newUser),
       })
 
       if (!res.ok) throw new Error('Registration failed')
 
-      toast.success('Registration successful! Redirecting to login...')
+      // Save user ID to localStorage for profile access
+      localStorage.setItem('userId', newUser.id)
+
+      toast.success('Registration successful! Redirecting to profile...')
 
       setTimeout(() => {
-        router.push('/login')
+        router.push('/userprofile')
       }, 2000)
     } catch (err) {
       console.error(err)

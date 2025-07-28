@@ -4,20 +4,24 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useDoctorStore } from '@/context/doctorStore'
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [loading, setLoading] = useState(false)
+  const hydrateDoctor = useDoctorStore((state) => state.hydrateDoctor)
+  const [loading, setLoading] = useState(true) // <- initially true to hydrate Zustand
 
   useEffect(() => {
-    setLoading(true)
+    // ✅ 1. Hydrate doctor from localStorage
+    hydrateDoctor()
 
+    // ✅ 2. Simulate loading for smoother transition
     const timeout = setTimeout(() => {
       setLoading(false)
-    }, 500) // simulate route change time or loader delay
+    }, 500)
 
     return () => clearTimeout(timeout)
-  }, [pathname])
+  }, [pathname, hydrateDoctor]) // <- run on pathname change
 
   return (
     <>

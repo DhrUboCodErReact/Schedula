@@ -1,20 +1,52 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Stethoscope, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import toast from 'react-hot-toast'
+import { useDoctorStore } from '@/context/doctorStore'
 
-const navItems = [
-  { name: 'Doctor List', path: '/dashboard' },
-  { name: 'Booking', path: '/booking' },
-  { name: 'Appointments', path: '/my-appointments' },
-]
+type NavItem = {
+  name: string
+  path: string
+  onClick?: () => void
+}
 
 export default function Navbar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const doctor = useDoctorStore((state) => state.doctor)
+  const logoutDoctor = useDoctorStore((state) => state.logoutDoctor)
+
+  const handleLogout = () => {
+    logoutDoctor()
+    localStorage.removeItem('doctorId')
+    toast.success('Logged out successfully!')
+    router.push('/')
+  }
+
+  const navItems: NavItem[] = [
+    { name: 'Doctor List', path: '/dashboard' },
+    { name: 'Booking', path: '/booking' },
+    { name: 'Appointments', path: '/my-appointments' },
+    { name: 'Profile', path: '/userprofile' },
+  ]
+
+  const doctorNavItems: NavItem[] = [
+    { name: 'Dashboard', path: '/doctor/doctor-dashboard' },
+    { name: 'Logout', path: '/', onClick: handleLogout },
+  ]
+
+  const guestNavItems: NavItem[] = [
+    ...navItems,
+    { name: 'Doctor Portal', path: '/doctor/login' },
+  ]
+
+  const itemsToRender = doctor ? doctorNavItems : guestNavItems
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -27,19 +59,29 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              href={item.path}
-              className={`text-base font-medium transition-colors ${
-                pathname === item.path
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
+          {itemsToRender.map((item) =>
+            item.onClick ? (
+              <button
+                key={item.name}
+                onClick={item.onClick}
+                className="text-base font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                {item.name}
+              </button>
+            ) : (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`text-base font-medium transition-colors ${
+                  pathname === item.path
+                    ? 'text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
+                {item.name}
+              </Link>
+            )
+          )}
         </div>
 
         {/* Hamburger Button */}
@@ -67,20 +109,33 @@ export default function Navbar() {
             className="md:hidden bg-white px-6 pb-4"
           >
             <div className="flex flex-col gap-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  onClick={() => setMenuOpen(false)}
-                  className={`text-base font-medium transition-colors ${
-                    pathname === item.path
-                      ? 'text-blue-600 border-b border-blue-600 pb-1'
-                      : 'text-gray-700 hover:text-blue-600'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {itemsToRender.map((item) =>
+                item.onClick ? (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      setMenuOpen(false)
+                      item.onClick?.()
+                    }}
+                    className="text-base font-medium text-gray-700 hover:text-blue-600 text-left"
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    onClick={() => setMenuOpen(false)}
+                    className={`text-base font-medium transition-colors ${
+                      pathname === item.path
+                        ? 'text-blue-600 border-b border-blue-600 pb-1'
+                        : 'text-gray-700 hover:text-blue-600'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              )}
             </div>
           </motion.div>
         )}
