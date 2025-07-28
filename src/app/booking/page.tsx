@@ -42,10 +42,18 @@ export default function DoctorBookingForm() {
       return
     }
 
+    // ✅ Get logged-in user ID from localStorage
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
+      toast.error('User not logged in.')
+      return
+    }
+
     const newAppointment = {
       doctorId: selectedDoctor.id,
       date: selectedDate,
       time: selectedTime,
+      userId, // ✅ Include userId in appointment
     }
 
     try {

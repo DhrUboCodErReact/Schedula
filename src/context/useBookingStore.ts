@@ -1,4 +1,3 @@
-// context/useBookingStore.ts
 import { create } from 'zustand'
 
 type Doctor = {
@@ -17,6 +16,7 @@ type Appointment = {
   doctor: Doctor
   date: string
   time: string
+  userId: string // ✅ NEW: associate user with appointment
 }
 
 interface BookingStore {

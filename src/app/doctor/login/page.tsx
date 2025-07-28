@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast, Toaster } from 'react-hot-toast'
 import { useDoctorStore } from '@/context/doctorStore'
+import { Stethoscope, UserCircle2, HeartPulse } from 'lucide-react'
 
 export default function DoctorLogin() {
   const router = useRouter()
@@ -29,7 +30,6 @@ export default function DoctorLogin() {
         return
       }
 
-      // ✅ Save doctor in Zustand and persist in localStorage
       setDoctor(doctor)
       localStorage.setItem('doctorId', doctor.id)
 
@@ -42,54 +42,84 @@ export default function DoctorLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-blue-50">
+    <div className="min-h-screen flex flex-col md:flex-row bg-white">
       <Toaster position="top-center" />
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-md p-8 space-y-4 w-full max-w-md border border-blue-200"
-      >
-        <h2 className="text-2xl font-bold text-blue-800 text-center">Doctor Login</h2>
 
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700">Email</span>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            placeholder="doctor@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-            className="input mt-1"
-            required
-          />
-        </label>
+      {/* Left Info Panel */}
+      <div className="flex-1 flex flex-col justify-center items-center text-center p-10 bg-white border-r border-gray-200">
+        <div className="max-w-md space-y-6">
+          <div className="flex items-center justify-center gap-2 text-indigo-600">
+            <Stethoscope size={38} strokeWidth={1.5} />
+            <h1 className="text-3xl font-semibold tracking-tight">Schedula Health</h1>
+          </div>
+          <p className="text-slate-600 leading-relaxed text-base">
+            Welcome to Schedula Health — a modern and secure platform tailored for doctors.
+            Manage your patients, appointments, and consultations from one place.
+          </p>
+          <div className="flex justify-center gap-6 pt-4 text-indigo-600">
+            <UserCircle2 size={28} />
+            <HeartPulse size={28} />
+            <Stethoscope size={28} />
+          </div>
+        </div>
+      </div>
 
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700">Password</span>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            placeholder="Your password"
-            onChange={(e) => setPassword(e.target.value)}
-            className="input mt-1"
-            required
-          />
-        </label>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+      {/* Right Form Panel (Updated Style) */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-lg bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-8"
         >
-          Login
-        </button>
+          <h2 className="text-2xl font-semibold text-slate-800 text-center">
+            Sign in to your account
+          </h2>
 
-        <p className="text-sm text-center text-gray-600">
-          New doctor?{' '}
-          <a href="/doctor/register" className="text-blue-600 underline hover:text-blue-800">
-            Register here
-          </a>
-        </p>
-      </form>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                placeholder="doctor@example.com"
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                placeholder="Your password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition"
+          >
+            Login
+          </button>
+
+          <p className="text-sm text-center text-slate-600">
+            New here?{' '}
+            <a
+              href="/doctor/register"
+              className="text-indigo-600 hover:underline font-medium"
+            >
+              Register as a Doctor
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
   )
 }

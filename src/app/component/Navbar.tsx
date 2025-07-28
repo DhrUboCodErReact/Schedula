@@ -37,8 +37,11 @@ export default function Navbar() {
   ]
 
   const doctorNavItems: NavItem[] = [
+    {name:'Profile', path:'/doctor/profile'},
     { name: 'Dashboard', path: '/doctor/doctor-dashboard' },
-    { name: 'Logout', path: '/', onClick: handleLogout },
+    {name:'My-Appointments', path:'/doctor/appointments'},
+    { name: 'Logout', path: '/', onClick: handleLogout }
+
   ]
 
   const guestNavItems: NavItem[] = [
