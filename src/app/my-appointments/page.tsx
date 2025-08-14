@@ -173,8 +173,8 @@ export default function MyAppointmentsPage() {
       }
 
       const [appointmentsRes, doctorsRes] = await Promise.all([
-        fetch("https://mock-api-schedula-1-xzbk.onrender.com/appointments"),
-        fetch("https://mock-api-schedula-1-xzbk.onrender.com/doctors"),
+        fetch("http://localhost:3001/appointments"),
+        fetch("http://localhost:3001/doctors"),
       ]);
 
       if (!appointmentsRes.ok || !doctorsRes.ok) {
@@ -236,7 +236,7 @@ export default function MyAppointmentsPage() {
     setCancellingId(id);
 
     try {
-      const response = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/appointments/${id}`, {
+      const response = await fetch(`http://localhost:3001/appointments/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

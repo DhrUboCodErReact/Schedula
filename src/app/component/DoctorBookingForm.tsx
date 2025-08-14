@@ -37,7 +37,7 @@ interface Doctor {
   location: string
   price: number
   rating: number
-  experience: string
+  experience: number
   availableDates: string[]
   availableTimes: string[]
   appointmentSlots?: AppointmentSlot[]
@@ -560,7 +560,7 @@ const getAppointmentSlotsForDate = (dateStr: string): AppointmentSlot[] => {
           selectedDoctor={selectedDoctor}
           selectedDate={selectedDate}
           selectedTime={selectedTime}
-          slotInfo={selectedSlotInfo}
+          // slotInfo={selectedSlotInfo}
           onClose={handleClosePaymentFlow}
           resetBooking={resetBooking}
         />

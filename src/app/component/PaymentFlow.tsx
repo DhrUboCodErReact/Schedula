@@ -10,7 +10,7 @@ interface Doctor {
   location: string
   price: number
   rating: number
-  experience: string
+  experience: number
   availableDates: string[]
   availableTimes: string[]
 }
@@ -35,6 +35,7 @@ interface PaymentFlowProps {
   selectedTime: string
   onClose: () => void
   resetBooking: () => void
+  
 }
 
 export default function PaymentFlow({ 

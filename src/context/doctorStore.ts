@@ -31,7 +31,7 @@ export interface Doctor {
   speciality?: string
   location?: string
   price?: number
-  experience?: number
+  experience: number
   image?: string
   
   // Legacy format for backward compatibility
