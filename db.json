@@ -12,6 +12,28 @@
       "medicalConditions": [],
       "allergies": [],
       "prescriptions": []
+    },
+    {
+      "id": "5efb",
+      "name": "john Doe",
+      "email": "john@gmail.com",
+      "password": "12345678",
+      "phone": "9932562369",
+      "age": "25",
+      "gender": "Male",
+      "bloodGroup": "O+",
+      "medicalConditions": [
+        "Diabetes"
+      ],
+      "allergies": [],
+      "prescriptions": [],
+      "testReports": [],
+      "healthDocuments": [],
+      "emergencyContacts": [],
+      "smokingStatus": "Never smoked",
+      "alcoholConsumption": "Never",
+      "insuranceProvider": "LIC",
+      "insuranceNumber": "LIC18256396523214536"
     }
   ],
   "doctors": [
@@ -144,9 +166,9 @@
       "rating": 4.6,
       "experience": 9,
       "availableDates": [
-        "2025-07-29",
-        "2025-07-27",
-        "2025-07-30"
+        "2025-08-29",
+        "2025-08-27",
+        "2025-08-30"
       ],
       "availableTimes": [
         "12:00",
@@ -164,9 +186,9 @@
       "rating": 4.2,
       "experience": 15,
       "availableDates": [
-        "2025-07-26",
-        "2025-07-28",
-        "2025-07-29"
+        "2025-08-26",
+        "2025-08-28",
+        "2025-08-29"
       ],
       "availableTimes": [
         "11:00",
@@ -184,9 +206,9 @@
       "rating": 4.9,
       "experience": 18,
       "availableDates": [
-        "2025-07-30",
-        "2025-07-31",
-        "2025-07-29"
+        "2025-08-30",
+        "2025-08-31",
+        "2025-08-29"
       ],
       "availableTimes": [
         "10:00",
@@ -204,9 +226,9 @@
       "rating": 4.4,
       "experience": 6,
       "availableDates": [
-        "2025-07-28",
-        "2025-07-29",
-        "2025-07-30"
+        "2025-08-28",
+        "2025-08-29",
+        "2025-08-30"
       ],
       "availableTimes": [
         "9:00",
@@ -326,38 +348,360 @@
       "location": "West Bengal",
       "experience": "6",
       "availableDates": [
-        "2025-07-27",
-        "2025-08-01",
-        "2025-08-03",
-        "2025-08-04",
-        "2025-08-08",
-        "2025-08-10",
-        "2025-08-11",
         "2025-08-15",
-        "2025-08-17",
-        "2025-08-17",
-        "2025-08-18",
         "2025-08-22",
-        "2025-08-25"
+        "2025-08-29"
       ],
       "availableTimes": [
-        "05:30",
-        "07:30",
-        "05:30",
-        "07:30",
-        "05:30"
+        "09:00",
+        "09:00",
+        "04:00"
       ],
       "price": "600",
       "slotTypes": [
         {
           "type": "wave",
-          "booked": 3,
-          "max": 10
+          "expected": 16,
+          "booked": 0,
+          "max": 1
         },
         {
           "type": "stream",
-          "expected": 10,
-          "booked": 2
+          "expected": 24,
+          "booked": 0,
+          "max": 1
+        },
+        {
+          "type": "stream",
+          "expected": 8,
+          "booked": 0,
+          "max": 1
+        }
+      ],
+      "appointmentSlots": [
+        {
+          "id": "slot_1754024050047_rrvprd2r0",
+          "date": "2025-08-15",
+          "startTime": "09:00",
+          "endTime": "17:00",
+          "slotDuration": 30,
+          "totalSlots": 16,
+          "bookedSlots": [],
+          "slotType": "wave",
+          "maxPatients": 1,
+          "isActive": true,
+          "createdAt": "2025-08-01T04:54:10.047Z",
+          "updatedAt": "2025-08-13T07:00:35.646Z",
+          "dayOfWeek": "Friday",
+          "availableSlots": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30",
+            "11:00",
+            "11:30",
+            "12:00",
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30"
+          ]
+        },
+        {
+          "id": "slot_1754024059310_s4l9ztt2u",
+          "date": "2025-08-22",
+          "startTime": "09:00",
+          "endTime": "17:00",
+          "slotDuration": 20,
+          "totalSlots": 24,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "maxPatients": 1,
+          "isActive": true,
+          "createdAt": "2025-08-01T04:54:19.310Z",
+          "updatedAt": "2025-08-13T07:00:13.690Z",
+          "dayOfWeek": "Friday",
+          "availableSlots": [
+            "09:00",
+            "09:20",
+            "09:40",
+            "10:00",
+            "10:20",
+            "10:40",
+            "11:00",
+            "11:20",
+            "11:40",
+            "12:00",
+            "12:20",
+            "12:40",
+            "13:00",
+            "13:20",
+            "13:40",
+            "14:00",
+            "14:20",
+            "14:40",
+            "15:00",
+            "15:20",
+            "15:40",
+            "16:00",
+            "16:20",
+            "16:40"
+          ]
+        },
+        {
+          "id": "slot_1754024099229_k9ldzp3gb",
+          "date": "2025-08-29",
+          "startTime": "04:00",
+          "endTime": "08:00",
+          "slotDuration": 30,
+          "totalSlots": 8,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "maxPatients": 1,
+          "isActive": true,
+          "createdAt": "2025-08-01T04:54:59.229Z",
+          "updatedAt": "2025-08-13T07:00:23.654Z",
+          "dayOfWeek": "Friday",
+          "availableSlots": [
+            "04:00",
+            "04:30",
+            "05:00",
+            "05:30",
+            "06:00",
+            "06:30",
+            "07:00",
+            "07:30"
+          ]
+        }
+      ],
+      "defaultStartTime": "09:00",
+      "defaultEndTime": "17:00",
+      "defaultSlotDuration": 30,
+      "defaultSlotType": "stream",
+      "defaultMaxPatients": 1,
+      "availableEndTimes": [
+        "17:00",
+        "17:00",
+        "08:00"
+      ],
+      "slotDurations": [
+        30,
+        20,
+        30
+      ],
+      "bookedSlots": [
+        [],
+        [],
+        []
+      ],
+      "rating": 3.5,
+      "reviewCount": 4,
+      "reviews": [
+        {
+          "id": "1755064627213",
+          "userId": "dbf6",
+          "appointmentId": "ea6f",
+          "rating": 5,
+          "review": "I recently had a consultation with Dr. Dhrubajyoti Das, and the experience was truly outstanding. From the moment I arrived, the clinic environment felt welcoming and well-organized. Dr. Das listened carefully to my concerns, asked insightful questions, and explained the diagnosis in clear and simple terms.What stood out most was the amount of time and patience Dr. Das devoted to ensuring I understood every aspect of my condition and the available treatment options. The advice was practical, t",
+          "createdAt": "2025-08-13T05:57:07.213Z",
+          "patientName": "Patient-dbf6"
+        },
+        {
+          "id": "1755100264540",
+          "userId": "dbf6",
+          "appointmentId": "cf85",
+          "rating": 2,
+          "review": "The consultation was okay but not very satisfying. The waiting time was longer than expected, and I felt the doctor could have listened more attentively to my concerns. Treatment advice was fine, but overall the experience left room for improvement.",
+          "createdAt": "2025-08-13T15:51:04.540Z",
+          "patientName": "Patient-dbf6"
+        },
+        {
+          "id": "1755111471651",
+          "userId": "5efb",
+          "appointmentId": "5a96",
+          "rating": 3,
+          "review": "I recently had a consultation with Dr. Dhrubajyoti Das. He was attentive and explained my condition clearly, which helped me understand the treatment plan. However, the waiting time before the appointment was a bit long, and follow-up arrangements could be smoother. Overall, a good experience but with some areas to improve.",
+          "createdAt": "2025-08-13T18:57:51.651Z",
+          "patientName": "Patient-5efb",
+          "updatedAt": "2025-08-14T05:12:05.280Z"
+        },
+        {
+          "id": "1755148348378",
+          "userId": "5efb",
+          "appointmentId": "6ea5",
+          "rating": 4,
+          "review": "Good hsjjbwdbljkb",
+          "createdAt": "2025-08-14T05:12:28.378Z",
+          "patientName": "Patient-5efb"
+        }
+      ]
+    },
+    {
+      "id": "4d10",
+      "name": "John Doe",
+      "email": "johndoe@gmai.com",
+      "password": "12345678",
+      "phone": "9632652365",
+      "qualification": "MBBS",
+      "speciality": "Cardiologist",
+      "location": "Bangalore",
+      "experience": "4",
+      "appointmentSlots": [
+        {
+          "date": "2025-08-01",
+          "startTime": "16:00",
+          "endTime": "20:00",
+          "slotDuration": 30,
+          "totalSlots": 8,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "availableSlots": [
+            "16:00",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:00",
+            "18:30",
+            "19:00",
+            "19:30"
+          ],
+          "dayOfWeek": "Friday",
+          "isActive": true,
+          "createdAt": "2025-07-31T07:52:16.526Z",
+          "updatedAt": "2025-07-31T07:52:16.526Z"
+        },
+        {
+          "date": "2025-08-08",
+          "startTime": "09:00",
+          "endTime": "17:00",
+          "slotDuration": 30,
+          "totalSlots": 16,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "availableSlots": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30",
+            "11:00",
+            "11:30",
+            "12:00",
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30"
+          ],
+          "dayOfWeek": "Friday",
+          "isActive": true,
+          "createdAt": "2025-07-31T07:52:16.527Z",
+          "updatedAt": "2025-07-31T07:52:16.527Z"
+        },
+        {
+          "date": "2025-08-15",
+          "startTime": "09:00",
+          "endTime": "17:00",
+          "slotDuration": 30,
+          "totalSlots": 16,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "availableSlots": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30",
+            "11:00",
+            "11:30",
+            "12:00",
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30"
+          ],
+          "dayOfWeek": "Friday",
+          "isActive": true,
+          "createdAt": "2025-07-31T07:52:16.527Z",
+          "updatedAt": "2025-07-31T07:52:16.527Z"
+        },
+        {
+          "date": "2025-08-22",
+          "startTime": "09:00",
+          "endTime": "17:00",
+          "slotDuration": 30,
+          "totalSlots": 16,
+          "bookedSlots": [],
+          "slotType": "stream",
+          "availableSlots": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30",
+            "11:00",
+            "11:30",
+            "12:00",
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30"
+          ],
+          "dayOfWeek": "Friday",
+          "isActive": true,
+          "createdAt": "2025-07-31T07:52:16.527Z",
+          "updatedAt": "2025-07-31T07:52:16.527Z"
+        }
+      ],
+      "price": "800",
+      "availableDates": [
+        "2025-08-01",
+        "2025-08-08",
+        "2025-08-15",
+        "2025-08-22"
+      ],
+      "availableTimes": [
+        "16:00",
+        "09:00",
+        "09:00",
+        "09:00"
+      ],
+      "slotTypes": [
+        {
+          "type": "stream",
+          "expected": 8,
+          "booked": 0
+        },
+        {
+          "type": "stream",
+          "expected": 16,
+          "booked": 0
+        },
+        {
+          "type": "stream",
+          "expected": 16,
+          "booked": 0
+        },
+        {
+          "type": "stream",
+          "expected": 16,
+          "booked": 0
         }
       ]
     }
@@ -368,20 +712,363 @@
       "doctorId": "4bab",
       "date": "2025-07-29",
       "time": "07:30",
-      "status": "completed"
+      "userId": "dbf6",
+      "status": "completed",
+      "prescriptions": [
+        {
+          "id": "6dzus6i55",
+          "medicineName": "Amlodipine",
+          "dosage": "2 Tablets twice",
+          "duration": "7 days ",
+          "notes": "",
+          "createdAt": "2025-08-06T06:34:14.397Z",
+          "updatedAt": "2025-08-06T06:45:10.667Z",
+          "frequency": "Once daily",
+          "instructions": "Place under tongue",
+          "beforeAfterFood": "Before meals"
+        }
+      ],
+      "prescription": {
+        "id": "max5hk33u",
+        "medicines": [
+          {
+            "id": "1tnes80ux",
+            "name": "Atorvastatin",
+            "dosage": "1 tablet",
+            "frequency": "Once daily",
+            "duration": "7 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "Before meals"
+          },
+          {
+            "id": "qvwiiohs0",
+            "name": "Losartan",
+            "dosage": "500mg",
+            "frequency": "Twice daily",
+            "duration": "5 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "With meals"
+          }
+        ],
+        "diagnosis": "Fever",
+        "symptoms": "",
+        "vitalSigns": {
+          "bloodPressure": "120/81",
+          "heartRate": "78",
+          "temperature": "99",
+          "weight": "76"
+        },
+        "followUpDate": "2025-08-30",
+        "additionalNotes": "",
+        "createdAt": "2025-08-06T07:05:02.301Z",
+        "updatedAt": "2025-08-07T07:01:35.495Z"
+      }
     },
     {
       "id": "42f1",
       "doctorId": "4bab",
       "date": "2025-07-27",
-      "time": "05:30"
+      "time": "05:30",
+      "userId": "dbf6",
+      "status": "cancelled"
     },
     {
       "id": "cf85",
       "doctorId": "4bab",
-      "date": "2025-08-04",
+      "date": "2025-08-03",
+      "time": "12:15",
+      "userId": "dbf6",
+      "status": "completed",
+      "rescheduleCount": 1,
+      "originalDate": "2025-08-04",
+      "originalTime": "08:00",
+      "prescription": {
+        "id": "ecd66c4wy",
+        "medicines": [
+          {
+            "id": "5zpgglu1n",
+            "name": "Atorvastatin",
+            "dosage": "1g",
+            "frequency": "Twice daily",
+            "duration": "5 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "Before meals"
+          }
+        ],
+        "diagnosis": "",
+        "symptoms": "",
+        "vitalSigns": {
+          "bloodPressure": "120/92",
+          "heartRate": "75",
+          "temperature": "100",
+          "weight": ""
+        },
+        "followUpDate": "2025-08-30",
+        "additionalNotes": "",
+        "createdAt": "2025-08-07T05:05:31.971Z",
+        "updatedAt": "2025-08-07T05:05:31.971Z"
+      }
+    },
+    {
+      "id": "547b",
+      "doctorId": "1",
+      "date": "2025-07-29",
+      "time": "17:00",
+      "userId": "59b2",
+      "status": "cancelled"
+    },
+    {
+      "id": "a465",
+      "doctorId": "4bab",
+      "date": "2025-08-02",
+      "time": "04:30",
+      "status": "cancelled",
+      "userId": "5efb"
+    },
+    {
+      "id": "2320",
+      "doctorId": "4bab",
+      "date": "2025-08-01",
+      "time": "02:30",
+      "userId": "dbf6",
+      "status": "cancelled",
+      "paymentMethod": "offline",
+      "paymentStatus": "pending",
+      "amount": 600
+    },
+    {
+      "id": "7eac",
+      "doctorId": "4bab",
+      "date": "2025-08-09",
+      "time": "11:00",
+      "userId": "dbf6",
+      "status": "completed",
+      "paymentMethod": "online",
+      "paymentStatus": "paid",
+      "amount": "600",
+      "rescheduleCount": 6,
+      "originalDate": "2025-08-04",
+      "originalTime": "01:30"
+    },
+    {
+      "id": "a3fa",
+      "doctorId": "4d10",
+      "date": "2025-08-01",
+      "time": "18:30",
+      "userId": "5efb",
+      "status": "Missed",
+      "paymentMethod": "online",
+      "paymentStatus": "paid",
+      "amount": "800"
+    },
+    {
+      "id": "5a96",
+      "doctorId": "4bab",
+      "date": "2025-08-06",
+      "time": "09:00",
+      "userId": "5efb",
+      "status": "completed",
+      "paymentMethod": "",
+      "paymentStatus": "pending",
+      "amount": "600",
+      "rescheduleCount": 3,
+      "originalDate": "2025-08-06",
+      "originalTime": "11:30",
+      "prescription": {
+        "id": "z7cxwvq69",
+        "medicines": [
+          {
+            "id": "761tkbjh3",
+            "name": "Paracetamol",
+            "dosage": "1 tablet",
+            "frequency": "Three times daily",
+            "duration": "5 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "After meals"
+          },
+          {
+            "id": "uswxvkg5m",
+            "name": "Ciprofloxacin",
+            "dosage": "1 tablet",
+            "frequency": "Twice daily",
+            "duration": "3 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "With meals"
+          }
+        ],
+        "diagnosis": "Viral Fever",
+        "symptoms": "Head Pain, Fever",
+        "vitalSigns": {
+          "bloodPressure": "120/85",
+          "heartRate": "76",
+          "temperature": "101",
+          "weight": "65.5"
+        },
+        "followUpDate": "2025-08-29",
+        "additionalNotes": "",
+        "createdAt": "2025-08-06T07:09:01.536Z",
+        "updatedAt": "2025-08-06T15:48:13.146Z"
+      }
+    },
+    {
+      "id": "6ea5",
+      "doctorId": "4bab",
+      "date": "2025-08-06",
+      "time": "19:00",
+      "userId": "5efb",
+      "status": "completed",
+      "paymentMethod": "online",
+      "paymentStatus": "paid",
+      "amount": "600",
+      "rescheduleCount": 2,
+      "originalDate": "2025-08-07",
+      "originalTime": "07:30",
+      "prescription": {
+        "id": "r57ul3hoh",
+        "medicines": [
+          {
+            "id": "juzno96pv",
+            "name": "Metformin",
+            "dosage": "250mg",
+            "frequency": "Once daily",
+            "duration": "3 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "Before meals"
+          },
+          {
+            "id": "j0abbtpn1",
+            "name": "Atorvastatin",
+            "dosage": "250mg",
+            "frequency": "Twice daily",
+            "duration": "5 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "Before meals"
+          }
+        ],
+        "diagnosis": "",
+        "symptoms": "",
+        "vitalSigns": {
+          "bloodPressure": "",
+          "heartRate": "",
+          "temperature": "",
+          "weight": ""
+        },
+        "followUpDate": "2025-08-30",
+        "additionalNotes": "",
+        "createdAt": "2025-08-07T05:07:52.473Z",
+        "updatedAt": "2025-08-07T05:07:52.473Z"
+      }
+    },
+    {
+      "id": "7df7",
+      "doctorId": "4bab",
+      "date": "2025-08-08",
+      "time": "15:45",
+      "userId": "5efb",
+      "status": "rescheduled",
+      "paymentMethod": "online",
+      "paymentStatus": "paid",
+      "amount": "600",
+      "rescheduleCount": 1,
+      "originalDate": "2025-08-06",
+      "originalTime": "13:00"
+    },
+    {
+      "id": "3f29",
+      "doctorId": "4bab",
+      "date": "2025-08-07",
       "time": "07:30",
-      "userId": "dbf6"
+      "userId": "5efb",
+      "status": "completed",
+      "paymentMethod": "",
+      "paymentStatus": "pending",
+      "amount": "600",
+      "prescription": {
+        "id": "1754551049909kd5n4",
+        "medicines": [
+          {
+            "id": "17545510470380w5ce",
+            "name": "Paracetamol",
+            "dosage": "1 tablet",
+            "frequency": "Twice daily",
+            "duration": "3 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "After meals"
+          }
+        ],
+        "diagnosis": "Fever",
+        "symptoms": "High temperature, Headache, Fatigue",
+        "vitalSigns": {
+          "bloodPressure": "120/80",
+          "heartRate": "74",
+          "temperature": "101",
+          "weight": "55"
+        },
+        "followUpDate": "",
+        "additionalNotes": "",
+        "createdAt": "2025-08-07T07:17:29.909Z",
+        "updatedAt": "2025-08-07T07:17:29.909Z"
+      }
+    },
+    {
+      "id": "1dd3",
+      "doctorId": "4bab",
+      "date": "2025-08-07",
+      "time": "14:00",
+      "userId": "5efb",
+      "status": "completed",
+      "paymentMethod": "online",
+      "paymentStatus": "paid",
+      "amount": "600",
+      "rescheduleCount": 1,
+      "originalDate": "2025-08-07",
+      "originalTime": "07:30",
+      "prescription": {
+        "id": "175455208729086ctk",
+        "medicines": [
+          {
+            "id": "1754552051964u1w6k",
+            "name": "Amlodipine",
+            "dosage": "1 tablet",
+            "frequency": "Twice daily",
+            "duration": "7 days",
+            "instructions": "Take on empty stomach",
+            "beforeAfterFood": "Before meals"
+          },
+          {
+            "id": "1754552084724l5768",
+            "name": "Aspirin",
+            "dosage": "1 tablet",
+            "frequency": "Three times daily",
+            "duration": "7 days",
+            "instructions": "Take with water",
+            "beforeAfterFood": "After meals"
+          }
+        ],
+        "diagnosis": "Back Pain",
+        "symptoms": "Back Pain",
+        "vitalSigns": {
+          "bloodPressure": "120/75",
+          "heartRate": "75",
+          "temperature": "100",
+          "weight": "75"
+        },
+        "followUpDate": "2025-08-28",
+        "additionalNotes": "",
+        "createdAt": "2025-08-07T07:34:47.290Z",
+        "updatedAt": "2025-08-07T07:34:47.290Z"
+      }
+    },
+    {
+      "id": "7f4f",
+      "doctorId": "4bab",
+      "date": "2025-08-29",
+      "time": "07:30",
+      "userId": "dbf6",
+      "status": "confirmed",
+      "paymentMethod": "",
+      "paymentStatus": "pending",
+      "amount": "600"
     }
   ]
 }

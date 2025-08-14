@@ -6,7 +6,14 @@ import { Toaster } from 'react-hot-toast'
 
 import Navbar from '@/app/component/Navbar'
 import Footer from '@/app/component/Footer'
+import BotpressChat from '@/app/component/BotpressChat'
 import ClientWrapper from '@/app/component/ClientWrapper' // 👈 We'll create this
+// import '@fullcalendar/common/main.css'; // ✅ use 'common', not 'core'
+// import '@fullcalendar/daygrid/main.css';
+
+
+
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,6 +44,7 @@ export default function RootLayout({
           <Toaster position="top-center" reverseOrder={false} />
           <Navbar />
           <main className="flex-grow">{children}</main>
+          <BotpressChat />
           <Footer />
         </ClientWrapper>
       </body>

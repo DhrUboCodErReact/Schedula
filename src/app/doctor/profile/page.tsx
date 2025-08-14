@@ -1,546 +1,760 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// app/profile/page.tsx
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Doctor, useDoctorStore } from '@/context/doctorStore'
-import { Pencil, Save, PlusCircle, Trash2, UserCircle } from 'lucide-react'
-import toast from 'react-hot-toast'
-import Image from 'next/image'
+import { useEffect, useState } from "react";
+import { Doctor, useDoctorStore, AppointmentSlot } from "@/context/doctorStore";
+import {
+  Pencil,
+  Save,
+  X,
+  CheckCircle,
+  AlertCircle,
+  Star,
+  Users,
+  Calendar,
+  Award,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
+  Stethoscope,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import DoctorBasicInfo from "@/app/component/DoctorBasicInfo";
+import AppointmentSlotsManager from "@/app/component/AppointmentSlotsManager";
 
-type EditableDoctor = Partial<Doctor> & { id: string }
+interface Review {
+  id: string;
+  userId: string;
+  appointmentId: string;
+  rating: number;
+  review: string;
+  createdAt: string;
+  patientName: string;
+}
+
+// Extended Doctor interface to include review properties
+interface ExtendedDoctor extends Doctor {
+  reviewCount?: number;
+  rating?: number;
+  reviews?: Review[];
+}
 
 export default function DoctorProfilePage() {
-  const { doctor, setDoctor } = useDoctorStore()
-  const [editing, setEditing] = useState(false)
-  const [formData, setFormData] = useState<EditableDoctor | null>(null)
+  const { doctor, setDoctor, updateDoctor } = useDoctorStore();
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState<ExtendedDoctor | null>(null);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [appointments, setAppointments] = useState<any[]>([]);
+
+  // Fetch appointments data
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/appointments");
+        if (response.ok) {
+          const appointmentsData = await response.json();
+          setAppointments(appointmentsData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch appointments:", error);
+        setAppointments([]);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  // Generate unique ID for new slots
+  const generateSlotId = (): string => {
+    return `slot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
 
   // Helper function to get next occurrence of a day
-  const getNextOccurrence = (dayName: string, weeksAhead: number = 0): string => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    const targetDay = days.indexOf(dayName)
-    
-    const today = new Date()
-    const currentDay = today.getDay()
-    
-    let daysUntilTarget = targetDay - currentDay
+  const getNextOccurrence = (
+    dayName: string,
+    weeksAhead: number = 0
+  ): string => {
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const targetDay = days.indexOf(dayName);
+
+    const today = new Date();
+    const currentDay = today.getDay();
+
+    let daysUntilTarget = targetDay - currentDay;
     if (daysUntilTarget <= 0) {
-      daysUntilTarget += 7 // Move to next week if day has passed
+      daysUntilTarget += 7;
     }
-    
-    const targetDate = new Date(today)
-    targetDate.setDate(today.getDate() + daysUntilTarget + (weeksAhead * 7))
-    
-    return targetDate.toISOString().split('T')[0] // Return YYYY-MM-DD format
-  }
 
-  // Helper function to get day name from date string
-  const getDayFromDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { weekday: 'long' })
-  }
+    const targetDate = new Date(today);
+    targetDate.setDate(today.getDate() + daysUntilTarget + weeksAhead * 7);
 
-  // Generate weekly recurring dates for next 4 weeks
-  const generateWeeklyDates = (selectedDays: string[]): string[] => {
-    const dates: string[] = []
-    
-    selectedDays.forEach(dayName => {
-      for (let week = 0; week < 4; week++) {
-        dates.push(getNextOccurrence(dayName, week))
-      }
-    })
-    
-    // Sort dates chronologically
-    return dates.sort()
-  }
+    return targetDate.toISOString().split("T")[0];
+  };
 
+  // Generate time slots based on start/end time and duration
+  const generateTimeSlots = (
+    startTime: string,
+    endTime: string,
+    duration: number
+  ): string[] => {
+    const slots: string[] = [];
+    const start = new Date(`2000-01-01T${startTime}:00`);
+    const end = new Date(`2000-01-01T${endTime}:00`);
+
+    const current = new Date(start);
+    while (current < end) {
+      const timeString = current.toTimeString().substring(0, 5);
+      slots.push(timeString);
+      current.setMinutes(current.getMinutes() + duration);
+    }
+
+    return slots;
+  };
+
+  // Calculate total slots based on time range and duration
+  const calculateTotalSlots = (
+    startTime: string,
+    endTime: string,
+    duration: number
+  ): number => {
+    const start = new Date(`2000-01-01T${startTime}:00`);
+    const end = new Date(`2000-01-01T${endTime}:00`);
+    const diffInMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
+    return Math.floor(diffInMinutes / duration);
+  };
+
+  // Initialize form data when doctor data is available
   useEffect(() => {
     if (doctor) {
-      // Convert existing day names to actual dates if needed
-      let availableDates = doctor.availableDates || []
-      
-      // Check if we have day names instead of dates
-      const hasDateFormat = availableDates.some(date => date.includes('-'))
-      
-      if (!hasDateFormat && availableDates.length > 0) {
-        // Convert day names to recurring dates
-        availableDates = generateWeeklyDates(availableDates)
+      // Convert legacy data to new appointment slots format if needed
+      let appointmentSlots: AppointmentSlot[] = [];
+
+      if (doctor.appointmentSlots) {
+        appointmentSlots = doctor.appointmentSlots;
+      } else if (doctor.availableDates && doctor.availableTimes) {
+        // Legacy conversion
+        appointmentSlots = doctor.availableDates.map((date, index) => ({
+          id: generateSlotId(),
+          date,
+          startTime:
+            doctor.availableTimes?.[index] ||
+            doctor.defaultStartTime ||
+            "09:00",
+          endTime:
+            doctor.availableEndTimes?.[index] ||
+            doctor.defaultEndTime ||
+            "17:00",
+          slotDuration:
+            doctor.slotDurations?.[index] || doctor.defaultSlotDuration || 30,
+          totalSlots: calculateTotalSlots(
+            doctor.availableTimes?.[index] || "09:00",
+            doctor.availableEndTimes?.[index] || "17:00",
+            doctor.slotDurations?.[index] || 30
+          ),
+          bookedSlots: doctor.bookedSlots?.[index] || [],
+          slotType:
+            doctor.slotTypes?.[index]?.type ||
+            doctor.defaultSlotType ||
+            "stream",
+          maxPatients:
+            doctor.slotTypes?.[index]?.max || doctor.defaultMaxPatients,
+          dayOfWeek: new Date(date).toLocaleDateString("en-US", {
+            weekday: "long",
+          }),
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
       }
 
       setFormData({
         ...doctor,
-        availableDates,
-        availableTimes: doctor.availableTimes || [],
-        slotTypes: doctor.slotTypes || [],
-      })
+        appointmentSlots,
+        // Set defaults if not present
+        defaultStartTime: doctor.defaultStartTime || "09:00",
+        defaultEndTime: doctor.defaultEndTime || "17:00",
+        defaultSlotDuration: doctor.defaultSlotDuration || 30,
+        defaultSlotType: doctor.defaultSlotType || "stream",
+        defaultMaxPatients: doctor.defaultMaxPatients || 1,
+      });
     }
-  }, [doctor])
+  }, [doctor]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => prev ? { ...prev, [name]: value } : prev)
-  }
+  // Handle basic info updates
+  const handleBasicInfoUpdate = (updates: Partial<ExtendedDoctor>) => {
+    if (formData) {
+      setFormData({ ...formData, ...updates });
+      setHasChanges(true);
+    }
+  };
 
-  const handleArrayChange = (
-    key: 'availableDates' | 'availableTimes',
-    index: number,
-    value: string
+  // Add new appointment slot
+  const handleAddSlot = () => {
+    if (!formData) return;
+
+    const newSlot: AppointmentSlot = {
+      id: generateSlotId(),
+      date: "",
+      startTime: formData.defaultStartTime || "09:00",
+      endTime: formData.defaultEndTime || "17:00",
+      slotDuration: formData.defaultSlotDuration || 30,
+      totalSlots: calculateTotalSlots(
+        formData.defaultStartTime || "09:00",
+        formData.defaultEndTime || "17:00",
+        formData.defaultSlotDuration || 30
+      ),
+      bookedSlots: [],
+      slotType: formData.defaultSlotType || "stream",
+      maxPatients: formData.defaultMaxPatients || 1,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    setFormData({
+      ...formData,
+      appointmentSlots: [...(formData.appointmentSlots || []), newSlot],
+    });
+    setHasChanges(true);
+  };
+
+  // Update appointment slot
+  const handleUpdateSlot = (
+    slotId: string,
+    updates: Partial<AppointmentSlot>
   ) => {
-    setFormData((prev) => {
-      if (!prev) return prev
-      const updatedArray = [...(prev[key] || [])]
-      updatedArray[index] = value
-      return { ...prev, [key]: updatedArray }
-    })
-  }
+    if (!formData?.appointmentSlots) return;
 
-  const deleteArrayItem = (key: 'availableDates' | 'availableTimes', index: number) => {
-    setFormData((prev) => {
-      if (!prev) return prev
-      const updatedArray = [...(prev[key] || [])]
-      updatedArray.splice(index, 1)
-      const updatedSlotTypes = [...(prev.slotTypes || [])]
-      updatedSlotTypes.splice(index, 1)
-      return { ...prev, [key]: updatedArray, slotTypes: updatedSlotTypes }
-    })
-  }
-
-  const addArrayItem = (key: 'availableDates' | 'availableTimes') => {
-    setFormData((prev) =>
-      prev
+    const updatedSlots = formData.appointmentSlots.map((slot) =>
+      slot.id === slotId
         ? {
-            ...prev,
-            [key]: [...(prev[key] || []), key === 'availableDates' ? '' : ''],
-            slotTypes: [
-              ...(prev.slotTypes || []),
-              { type: 'stream', expected: 0, booked: 0 },
-            ],
+            ...slot,
+            ...updates,
+            availableSlots:
+              updates.startTime || updates.endTime || updates.slotDuration
+                ? generateTimeSlots(
+                    updates.startTime || slot.startTime,
+                    updates.endTime || slot.endTime,
+                    updates.slotDuration || slot.slotDuration
+                  ).filter(
+                    (timeSlot) =>
+                      !(updates.bookedSlots || slot.bookedSlots).includes(
+                        timeSlot
+                      )
+                  )
+                : slot.availableSlots,
+            updatedAt: new Date().toISOString(),
           }
-        : prev
-    )
-  }
+        : slot
+    );
 
-  // Handle day selection and generate recurring dates
-  const handleDaySelection = (index: number, selectedDay: string) => {
-    if (!selectedDay) {
-      handleArrayChange('availableDates', index, '')
-      return
+    setFormData({ ...formData, appointmentSlots: updatedSlots });
+    setHasChanges(true);
+  };
+
+  // Delete appointment slot
+  const handleDeleteSlot = (slotId: string) => {
+    if (!formData?.appointmentSlots) return;
+
+    const updatedSlots = formData.appointmentSlots.filter(
+      (slot) => slot.id !== slotId
+    );
+    setFormData({ ...formData, appointmentSlots: updatedSlots });
+    setHasChanges(true);
+  };
+
+  // Generate recurring appointments
+  const handleGenerateRecurring = (slotId: string, weeks: number) => {
+    if (!formData?.appointmentSlots) return;
+
+    const baseSlot = formData.appointmentSlots.find(
+      (slot) => slot.id === slotId
+    );
+    if (!baseSlot || !baseSlot.dayOfWeek) return;
+
+    const newSlots: AppointmentSlot[] = [];
+
+    for (let week = 1; week < weeks; week++) {
+      const newDate = getNextOccurrence(baseSlot.dayOfWeek, week);
+      const newSlot: AppointmentSlot = {
+        ...baseSlot,
+        id: generateSlotId(),
+        date: newDate,
+        bookedSlots: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      newSlots.push(newSlot);
     }
 
-    setFormData((prev) => {
-      if (!prev) return prev
-      
-      const updatedDates = [...(prev.availableDates || [])]
-      
-      // Generate 4 weeks of dates for this day
-      const weeklyDates = []
-      for (let week = 0; week < 4; week++) {
-        weeklyDates.push(getNextOccurrence(selectedDay, week))
-      }
-      
-      // Replace the current slot with the first date, and add the rest
-      updatedDates[index] = weeklyDates[0]
-      
-      // Add remaining weeks after current position
-      for (let i = 1; i < weeklyDates.length; i++) {
-        updatedDates.splice(index + i, 0, weeklyDates[i])
-      }
-      
-      // Also add corresponding time slots and slot types
-      const updatedTimes = [...(prev.availableTimes || [])]
-      const updatedSlotTypes = [...(prev.slotTypes || [])]
-      
-      for (let i = 1; i < weeklyDates.length; i++) {
-        updatedTimes.splice(index + i, 0, updatedTimes[index] || '')
-        updatedSlotTypes.splice(index + i, 0, updatedSlotTypes[index] || { type: 'stream', expected: 0, booked: 0 })
-      }
-      
-      return { 
-        ...prev, 
-        availableDates: updatedDates.sort(),
-        availableTimes: updatedTimes,
-        slotTypes: updatedSlotTypes
-      }
-    })
-  }
+    setFormData({
+      ...formData,
+      appointmentSlots: [...formData.appointmentSlots, ...newSlots],
+    });
+    setHasChanges(true);
+    toast.success(`Generated ${newSlots.length} recurring appointments`);
+  };
 
-  const handleUpdate = async () => {
-    if (!formData?.id) return
+  // Save changes
+  const handleSave = async () => {
+    if (!formData?.id) return;
+
+    setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:3001/doctors/${formData.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
+      // Prepare comprehensive data structure
+      const updateData = {
+        ...formData,
+        // Legacy format for backward compatibility
+        availableDates:
+          formData.appointmentSlots?.map((slot) => slot.date) || [],
+        availableTimes:
+          formData.appointmentSlots?.map((slot) => slot.startTime) || [],
+        availableEndTimes:
+          formData.appointmentSlots?.map((slot) => slot.endTime) || [],
+        slotDurations:
+          formData.appointmentSlots?.map((slot) => slot.slotDuration) || [],
+        bookedSlots:
+          formData.appointmentSlots?.map((slot) => slot.bookedSlots) || [],
+        slotTypes:
+          formData.appointmentSlots?.map((slot) => ({
+            type: slot.slotType,
+            expected: slot.totalSlots,
+            booked: slot.bookedSlots.length,
+            max: slot.maxPatients,
+          })) || [],
+        // Enhanced appointment slots with all metadata
+        appointmentSlots:
+          formData.appointmentSlots?.map((slot) => ({
+            ...slot,
+            availableSlots: generateTimeSlots(
+              slot.startTime,
+              slot.endTime,
+              slot.slotDuration
+            ).filter((timeSlot) => !slot.bookedSlots.includes(timeSlot)),
+            dayOfWeek: slot.date
+              ? new Date(slot.date).toLocaleDateString("en-US", {
+                  weekday: "long",
+                })
+              : slot.dayOfWeek,
+          })) || [],
+      };
 
-      if (!res.ok) throw new Error('Update failed')
-      const updated = await res.json()
-      setDoctor(updated)
-      toast.success('Profile updated with weekly recurring dates!')
-      setEditing(false)
-    } catch {
-      toast.error('Failed to update profile')
+      console.log(
+        "💾 Saving doctor profile:",
+        JSON.stringify(updateData, null, 2)
+      );
+
+      const res = await fetch(`http://localhost:3001/doctors/${formData.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      });
+
+      if (!res.ok) throw new Error("Update failed");
+      const updated = await res.json();
+
+      console.log(
+        "✅ Profile updated successfully:",
+        JSON.stringify(updated, null, 2)
+      );
+
+      setDoctor(updated);
+      setHasChanges(false);
+      setEditing(false);
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      console.error("❌ Update error:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // Cancel editing
+  const handleCancel = () => {
+    if (hasChanges) {
+      if (
+        confirm("You have unsaved changes. Are you sure you want to cancel?")
+      ) {
+        setFormData(doctor);
+        setEditing(false);
+        setHasChanges(false);
+      }
+    } else {
+      setEditing(false);
+    }
+  };
+
+  // Star Rating Component
+  const StarRating = ({
+    rating,
+    size = "sm",
+  }: {
+    rating: number;
+    size?: "sm" | "md" | "lg";
+  }) => {
+    const sizeClasses = {
+      sm: "w-4 h-4",
+      md: "w-5 h-5",
+      lg: "w-6 h-6",
+    };
+
+    return (
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`${sizeClasses[size]} ${
+              star <= rating
+                ? "fill-yellow-400 text-yellow-400"
+                : "fill-gray-200 text-gray-200"
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Format date helper
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  // Truncate text helper
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + "...";
+  };
+
+  // Calculate completed appointments for this doctor
+  const getCompletedAppointmentsCount = () => {
+    if (!formData?.id) return 0;
+
+    // Count completed appointments for this doctor from the appointments data
+    const completedAppointments = appointments.filter(
+      (appointment) =>
+        appointment.doctorId === formData.id &&
+        appointment.status === "completed"
+    ).length;
+
+    return completedAppointments;
+  };
+
+  if (!formData) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="max-w-7xl mx-auto pt-20 pb-16 px-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-10 text-center">
+            <div className="animate-pulse">
+              <div className="w-32 h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full mx-auto mb-6"></div>
+              <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-48 mx-auto mb-4"></div>
+              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-32 mx-auto mb-2"></div>
+              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-40 mx-auto"></div>
+            </div>
+            <p className="text-gray-600 mt-6 text-lg">
+              Loading your premium profile...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
-  if (!formData) return <p className="text-center mt-10 text-gray-600">Loading profile...</p>
-
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-  // Group dates by day for display
-  const groupedDates = formData.availableDates?.reduce((acc: {[key: string]: string[]}, date) => {
-    if (date) {
-      const day = getDayFromDate(date)
-      if (!acc[day]) acc[day] = []
-      acc[day].push(date)
-    }
-    return acc
-  }, {}) || {}
+  const totalReviews = formData.reviewCount || 0;
+  const averageRating = formData.rating || 0;
+  const reviews = formData.reviews || [];
+  const completedAppointments = getCompletedAppointmentsCount();
 
   return (
-    <section className="max-w-5xl mx-auto pt-20 pb-16 px-6">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow-lg p-6 md:p-10">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-blue-900">Doctor Profile</h2>
-          <button
-            onClick={() => (editing ? handleUpdate() : setEditing(true))}
-            className={`flex items-center gap-2 px-5 py-2.5 text-white text-sm rounded-lg font-medium transition
-            ${editing ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}`}
-          >
-            {editing ? <Save className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
-            {editing ? 'Save' : 'Edit'}
-          </button>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-10 items-center md:items-start">
-          <div className="flex flex-col items-center">
-            <div className="relative w-36 h-36 rounded-full overflow-hidden border-[5px] border-white shadow-md bg-gradient-to-br from-blue-200 to-blue-100">
-              {formData.image ? (
-                <Image
-                  src={formData.image}
-                  alt="Doctor"
-                  width={144}
-                  height={144}
-                  className="object-cover w-full h-full"
-                />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full text-blue-800">
-                  <UserCircle className="w-20 h-20" />
+    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="max-w-7xl mx-auto pt-20 pb-16 px-6">
+        {/* Premium Header Card */}
+        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  {formData.name?.charAt(0) || "D"}
                 </div>
-              )}
-              <div className="absolute bottom-0 w-full text-center text-xs bg-blue-600 text-white py-1 font-medium">
-                {formData.speciality || 'Doctor'}
+                <div className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-2 border-white"></div>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-indigo-800 bg-clip-text text-transparent">
+                  {formData.name}
+                </h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <Stethoscope className="w-5 h-5 text-blue-600" />
+                  <span className="text-lg text-blue-700 font-medium">
+                    {formData.speciality}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-4 h-4" />
+                    {formData.location}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Award className="w-4 h-4" />
+                    {formData.experience} years exp.
+                  </div>
+                </div>
               </div>
             </div>
-            {editing && (
-              <input
-                type="text"
-                name="image"
-                value={formData.image || ''}
-                onChange={handleChange}
-                placeholder="Paste Image URL"
-                className="mt-3 text-xs w-full px-3 py-1 rounded-md border border-blue-300 focus:ring-2 focus:ring-blue-500"
-              />
-            )}
-          </div>
 
-          <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {[['Name', 'name'], ['Email', 'email'], ['Phone', 'phone'], ['Qualification', 'qualification'], ['Speciality', 'speciality'], ['Location', 'location'], ['Experience (yrs)', 'experience'], ['Price (₹)', 'price']].map(([label, key]) => (
-              <div key={key} className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-                <label className="text-xs text-gray-500 block mb-1">{label}</label>
-                {!editing ? (
-                  <p className="text-blue-900 font-semibold text-sm">{(formData as any)[key] || '-'}</p>
-                ) : (
-                  <input
-                    type={key === 'email' ? 'email' : key === 'price' || key === 'experience' ? 'number' : 'text'}
-                    name={key}
-                    value={(formData as any)[key] || ''}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                )}
-              </div>
-            ))}
-
-            <div className="col-span-1 sm:col-span-2 bg-white rounded-xl p-4 border border-blue-100 shadow-sm">
-              <label className="text-xs text-gray-500 block mb-2">Weekly Available Schedule</label>
-              {!editing ? (
-                <div className="space-y-3">
-                  {Object.keys(groupedDates).length ? (
-                    Object.entries(groupedDates).map(([day, dates]) => (
-                      <div key={day} className="bg-blue-50 rounded-lg p-3">
-                        <div className="font-medium text-blue-800 text-sm mb-2">{day}s</div>
-                        <div className="flex flex-wrap gap-1">
-                          {dates.map((date, i) => (
-                            <span key={i} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                              {new Date(date).toLocaleDateString('en-GB')}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-400">No available days</p>
-                  )}
+            <div className="flex items-center gap-4">
+              {hasChanges && editing && (
+                <div className="flex items-center gap-2 text-sm text-amber-700 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2 rounded-full border border-amber-200">
+                  <AlertCircle className="w-4 h-4" />
+                  Unsaved changes
                 </div>
-              ) : (
-                <>
-                  <p className="text-xs text-blue-600 mb-3">
-                    Select days to automatically generate 4 weeks of recurring appointments
-                  </p>
-                  {formData.availableDates?.map((date, idx) => {
-                    // Skip if this is a generated recurring date (not the first of its kind)
-                    const dayName = date ? getDayFromDate(date) : ''
-                    const isFirstOfDay = !formData.availableDates?.slice(0, idx).some(d => d && getDayFromDate(d) === dayName)
-                    
-                    if (!isFirstOfDay && date) return null
-
-                    return (
-                      <div key={idx} className="flex items-center gap-2 mb-2">
-                        <select
-                          value={dayName}
-                          onChange={(e) => handleDaySelection(idx, e.target.value)}
-                          className="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                        >
-                          <option value="">Select Day for Weekly Recurrence</option>
-                          {daysOfWeek.map((day) => (
-                            <option key={day} value={day}>{day}</option>
-                          ))}
-                        </select>
-                        <button onClick={() => deleteArrayItem('availableDates', idx)} className="text-red-500 hover:text-red-700">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    )
-                  })}
-                  <button
-                    onClick={() => addArrayItem('availableDates')}
-                    className="text-blue-600 hover:underline text-sm mt-1 flex items-center gap-1"
-                  >
-                    <PlusCircle className="w-4 h-4" /> Add Weekly Day
-                  </button>
-                </>
               )}
-            </div>
 
-            <div className="col-span-1 sm:col-span-2 bg-white rounded-xl p-4 border border-blue-100 shadow-sm">
-              <label className="text-xs text-gray-500 block mb-2">Available Time Slots</label>
-              {!editing ? (
-                <div className="flex flex-wrap gap-2">
-                  {formData.availableTimes?.length ? (
-                    formData.availableTimes.map((time, i) => (
-                      <span key={i} className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow">{time}</span>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-400">No times available</p>
-                  )}
-                </div>
-              ) : (
-                <>
-                  {formData.availableTimes?.map((time, idx) => (
-                    <div key={idx} className="flex items-center gap-2 mb-2">
-                      <input
-                        type="time"
-                        value={time}
-                        onChange={(e) => handleArrayChange('availableTimes', idx, e.target.value)}
-                        className="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                      />
-                      <button onClick={() => deleteArrayItem('availableTimes', idx)} className="text-red-500 hover:text-red-700">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => addArrayItem('availableTimes')}
-                    className="text-blue-600 hover:underline text-sm mt-1 flex items-center gap-1"
-                  >
-                    <PlusCircle className="w-4 h-4" /> Add Time
-                  </button>
-                </>
-              )}
-            </div>
-
-            <div className="col-span-1 sm:col-span-2 bg-white rounded-xl p-5 border border-blue-100 shadow-sm">
-              <div className="flex justify-between items-center mb-4">
-                <label className="text-sm text-gray-700 font-medium">Consultation Setup</label>
-                {editing && (
-                  <button
-                    onClick={() => {
-                      setFormData((prev) => prev ? {
-                        ...prev,
-                        slotTypes: [
-                          ...(prev.slotTypes || []),
-                          { type: 'stream', expected: 0, booked: 0 }
-                        ]
-                      } : prev)
-                    }}
-                    className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                  >
-                    <PlusCircle className="w-4 h-4" /> Add Slot
-                  </button>
-                )}
-              </div>
-              
-              <p className="text-gray-500 text-sm mb-4">
-                <strong>Regular:</strong> Continuous patient flow. <br />
-                <strong>Group:</strong> Patients in batches.
-              </p>
-
-              {!editing ? (
-                <div className="space-y-2">
-                  {formData.slotTypes?.length ? (
-                    formData.slotTypes.map((slot, i) => (
-                      <p key={i} className="text-sm text-blue-900 font-medium">
-                        {slot.type === 'wave'
-                          ? `Group (Booked: ${slot.booked} / Max: ${slot.max})`
-                          : `Regular (Booked: ${slot.booked || 0} / Expected: ${slot.expected || 0})`}
-                      </p>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-400">No consultation slots configured</p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {formData.slotTypes?.map((slot, i) => (
-                    <div key={i} className="border rounded-lg p-4 bg-blue-50/50 relative">
-                      {formData.slotTypes && formData.slotTypes.length > 1 && (
-                        <button
-                          onClick={() => {
-                            setFormData((prev) => {
-                              if (!prev) return prev
-                              const updated = [...(prev.slotTypes || [])]
-                              updated.splice(i, 1)
-                              return { ...prev, slotTypes: updated }
-                            })
-                          }}
-                          className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+              <div className="flex gap-3">
+                {editing ? (
+                  <>
+                    <button
+                      onClick={handleCancel}
+                      disabled={isLoading}
+                      className="flex items-center gap-2 px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50"
+                    >
+                      <X className="w-4 h-4" />
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={isLoading || !hasChanges}
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                    >
+                      {isLoading ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
                       )}
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="flex flex-col gap-1">
-                          <label className="text-xs text-gray-600 font-medium">Slot Type</label>
-                          <select
-                            value={slot.type}
-                            onChange={(e) => {
-                              const updated = [...(formData.slotTypes || [])]
-                              if (e.target.value === 'wave') {
-                                updated[i] = {
-                                  type: 'wave',
-                                  expected: 0,
-                                  max: 1,
-                                  booked: 0
-                                }
-                              } else {
-                                updated[i] = {
-                                  type: 'stream',
-                                  expected: 0,
-                                  booked: 0
-                                }
-                              }
-                              setFormData((prev) => prev ? { ...prev, slotTypes: updated } : prev)
-                            }}
-                            className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                          >
-                            <option value="stream">Regular</option>
-                            <option value="wave">Group</option>
-                          </select>
-                        </div>
+                      {isLoading ? "Saving..." : "Save Changes"}
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setEditing(true)}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    <Pencil className="w-4 h-4" />
+                    Edit Profile
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
 
-                        {slot.type === 'wave' ? (
-                          <>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-600 font-medium">Max Patients</label>
-                              <input
-                                type="number"
-                                min="1"
-                                value={slot.max || ''}
-                                onChange={(e) => {
-                                  const updated = [...(formData.slotTypes || [])]
-                                  updated[i] = { ...updated[i], max: Number(e.target.value) }
-                                  setFormData((prev) => prev ? { ...prev, slotTypes: updated } : prev)
-                                }}
-                                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter max patients"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-600 font-medium">Booked</label>
-                              <input
-                                type="number"
-                                min="0"
-                                max={slot.max || 999}
-                                value={typeof slot.booked === 'number' ? slot.booked : 0}
-                                onChange={(e) => {
-                                  const updated = [...(formData.slotTypes || [])]
-                                  updated[i] = { ...updated[i], booked: Number(e.target.value) }
-                                  setFormData((prev) => prev ? { ...prev, slotTypes: updated } : prev)
-                                }}
-                                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-600 font-medium">Expected</label>
-                              <input
-                                type="number"
-                                min="0"
-                                value={slot.expected || 0}
-                                onChange={(e) => {
-                                  const updated = [...(formData.slotTypes || [])]
-                                  updated[i] = { ...updated[i], expected: Number(e.target.value) }
-                                  setFormData((prev) => prev ? { ...prev, slotTypes: updated } : prev)
-                                }}
-                                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                                placeholder="Expected patients"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-600 font-medium">Booked</label>
-                              <input
-                                type="number"
-                                min="0"
-                                value={typeof slot.booked === 'number' ? slot.booked : 0}
-                                onChange={(e) => {
-                                  const updated = [...(formData.slotTypes || [])]
-                                  updated[i] = { ...updated[i], booked: Number(e.target.value) }
-                                  setFormData((prev) => prev ? { ...prev, slotTypes: updated } : prev)
-                                }}
-                                className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-                              />
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {(!formData.slotTypes || formData.slotTypes.length === 0) && (
-                    <div className="text-center py-8 text-gray-500">
-                      <p className="mb-2">No consultation slots added yet</p>
-                      <button
-                        onClick={() => {
-                          setFormData((prev) => prev ? {
-                            ...prev,
-                            slotTypes: [{ type: 'stream', expected: 0, booked: 0 }]
-                          } : prev)
-                        }}
-                        className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1 mx-auto"
-                      >
-                        <PlusCircle className="w-4 h-4" /> Add First Slot
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-100">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <StarRating rating={averageRating} size="sm" />
+                <span className="text-sm font-medium text-gray-700">
+                  ({averageRating.toFixed(1)})
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">{totalReviews} Reviews</p>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Users className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {completedAppointments}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">Patients Treated</p>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Calendar className="w-4 h-4 text-green-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {formData.appointmentSlots?.length || 0}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">Available Slots</p>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-1">
+                <Clock className="w-4 h-4 text-purple-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  ₹{formData.price}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">Consultation Fee</p>
             </div>
           </div>
         </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Basic Information */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Professional Information
+              </h2>
+              <DoctorBasicInfo
+                doctor={formData}
+                isEditing={editing}
+                onUpdate={handleBasicInfoUpdate}
+              />
+            </div>
+
+            {/* Appointment Slots */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+              <AppointmentSlotsManager
+                appointmentSlots={formData.appointmentSlots || []}
+                isEditing={editing}
+                onAddSlot={handleAddSlot}
+                onUpdateSlot={handleUpdateSlot}
+                onDeleteSlot={handleDeleteSlot}
+                onGenerateRecurring={handleGenerateRecurring}
+              />
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-8">
+            {/* Reviews & Ratings */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Reviews & Ratings
+                </h2>
+                <div className="flex items-center gap-2">
+                  <StarRating rating={averageRating} size="md" />
+                  <span className="text-lg font-semibold text-gray-900">
+                    {averageRating.toFixed(1)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Rating Summary */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border border-blue-100">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-blue-900 mb-2">
+                    {averageRating.toFixed(1)}
+                  </div>
+                  <div className="flex justify-center mb-2">
+                    <StarRating rating={averageRating} size="lg" />
+                  </div>
+                  <p className="text-gray-600">
+                    Based on {totalReviews} patient{" "}
+                    {totalReviews === 1 ? "review" : "reviews"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Individual Reviews */}
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {reviews.length > 0 ? (
+                  reviews.map((review: Review, index: number) => (
+                    <div
+                      key={review.id}
+                      className="bg-gray-50 rounded-xl p-4 border border-gray-100"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                              P
+                            </div>
+                            <span className="font-medium text-gray-900">
+                              Anonymous Patient
+                            </span>
+                          </div>
+                          <StarRating rating={review.rating} size="sm" />
+                        </div>
+                        <span className="text-xs text-gray-500">
+                          {formatDate(review.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {truncateText(review.review, 150)}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <Star className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                    <p>No reviews yet</p>
+                    <p className="text-sm mt-1">
+                      Patient reviews will appear here
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                Contact Information
+              </h3>
+              <div className="space-y-4">
+                {formData.email && (
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                    <Mail className="w-5 h-5 text-gray-600" />
+                    <span className="text-gray-700">{formData.email}</span>
+                  </div>
+                )}
+                {formData.phone && (
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                    <Phone className="w-5 h-5 text-gray-600" />
+                    <span className="text-gray-700">{formData.phone}</span>
+                  </div>
+                )}
+                {formData.qualification && (
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                    <Award className="w-5 h-5 text-gray-600" />
+                    <span className="text-gray-700">
+                      {formData.qualification}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Success Message */}
+        {!editing &&
+          !hasChanges &&
+          formData.appointmentSlots &&
+          formData.appointmentSlots.length > 0 && (
+            <div className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+                <div>
+                  <p className="font-medium text-green-900">Profile Complete</p>
+                  <p className="text-green-700 text-sm">
+                    Your profile is up to date with{" "}
+                    {formData.appointmentSlots.length} appointment slots
+                    configured
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </section>
-  )
+  );
 }

@@ -27,8 +27,8 @@ export default function DoctorDashboardPage() {
         const filtered = appointmentsData.filter((appt: any) => {
           const apptDate = parseISO(appt.date)
           const isUpcoming = isToday(apptDate) || isAfter(apptDate, today)
-          const isPending = (appt.status ?? 'pending') === 'pending'
-          return appt.doctorId === doctor?.id && isUpcoming && isPending
+          const isRelevantStatus = appt.status !== 'completed' && appt.status !== 'cancelled'
+          return appt.doctorId === doctor?.id && isUpcoming && isRelevantStatus
         })
 
         setAppointments(filtered)
@@ -51,7 +51,7 @@ export default function DoctorDashboardPage() {
         {/* Appointments Section */}
         <section className="bg-gradient-to-tr from-blue-200 to-blue-50 shadow-xl rounded-2xl p-6 border border-blue-300 mb-8">
           <h3 className="text-xl font-semibold mb-4 text-blue-800">
-            Upcoming Appointments (Pending)
+            Upcoming Appointments (Pending or Confirmed)
           </h3>
 
           {appointments.length > 0 ? (
@@ -72,16 +72,33 @@ export default function DoctorDashboardPage() {
                         <p className="text-sm text-gray-600 mt-1">
                           Date: {appt.date} &nbsp;&nbsp; Time: {appt.time}
                         </p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Payment: <span className="font-medium">{appt.paymentMethod ?? 'N/A'}</span> —{' '}
+                          <span
+                            className={`${
+                              appt.paymentStatus === 'paid'
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                            } font-semibold`}
+                          >
+                            {appt.paymentStatus ?? 'unpaid'}
+                          </span>
+                        </p>
                       </div>
-                      <span
-                        className={`text-sm font-medium px-3 py-1 rounded-full ${
-                          appt.status === 'completed'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}
-                      >
-                        {appt.status ?? 'pending'}
-                      </span>
+
+                      <div className="text-right">
+                        <span
+                          className={`text-sm font-medium px-3 py-1 rounded-full block ${
+                            appt.status === 'completed'
+                              ? 'bg-green-100 text-green-700'
+                              : appt.status === 'confirmed'
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
+                          {appt.status ?? 'pending'}
+                        </span>
+                      </div>
                     </div>
                   </li>
                 )
@@ -89,13 +106,13 @@ export default function DoctorDashboardPage() {
             </ul>
           ) : (
             <p className="text-gray-500 italic">
-              No upcoming pending appointments.
+              No upcoming pending or confirmed appointments.
             </p>
           )}
         </section>
 
         {/* Quick Actions */}
-        <section className="bg-gradient-to-tr from-gray-100 to-gray-200 shadow-xl rounded-2xl p-6 border border-gray-300">
+        <section className="bg-gradient-to-tr from-gray-100 to-gray-200 shadow-xl rounded-2xl p-6 border border-gray-300 mb-10">
           <h3 className="text-xl font-semibold mb-4 text-gray-800">
             Quick Actions
           </h3>

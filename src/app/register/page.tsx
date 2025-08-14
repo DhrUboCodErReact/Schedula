@@ -7,19 +7,19 @@ export default function RegisterPage() {
         
         {/* Left: Welcome Section */}
         <div className="space-y-6">
-          <h1 className="text-4xl font-extrabold text-gray-800 leading-tight">
+          <h1 className="text-4xl font-extrabold text-blue-800 leading-tight">
             Join Our Healthcare Platform
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-blue-600">
             Book appointments with top-rated doctors, access your medical records anytime, and take control of your health journey — all in one place.
           </p>
-          <ul className="text-gray-700 list-disc ml-6 space-y-1">
+          <ul className="text-blue-800 list-disc ml-6 space-y-1">
             <li>Instant doctor appointments</li>
             <li>Secure medical history tracking</li>
             <li>Expert healthcare at your fingertips</li>
             <li>Trusted by thousands of patients</li>
           </ul>
-          <p className="text-sm text-gray-500 pt-2">
+          <p className="text-sm text-blue-500 pt-2">
             100% confidential & secure – your data is safe with us.
           </p>
         </div>

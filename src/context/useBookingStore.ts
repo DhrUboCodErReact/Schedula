@@ -1,7 +1,27 @@
 import { create } from 'zustand'
 
+// Define AppointmentSlot interface if you need it
+interface AppointmentSlot {
+  id: string
+  date: string
+  startTime: string
+  endTime: string
+  slotDuration: number
+  totalSlots: number
+  bookedSlots: string[]
+  slotType: 'wave' | 'stream'
+  maxPatients?: number
+  availableSlots?: string[]
+  dayOfWeek?: string
+  isActive?: boolean
+  createdAt?: string
+  updatedAt?: string
+  isRecurring?: boolean
+  recurringWeeks?: number
+}
+
 type Doctor = {
-  id: number
+  id: string // String for consistency with your API
   name: string
   speciality: string
   location: string
@@ -10,13 +30,14 @@ type Doctor = {
   experience: number
   availableDates: string[]
   availableTimes: string[]
+  appointmentSlots?: AppointmentSlot[] // Fixed: Now it's a property, not a method, and optional
 }
 
 type Appointment = {
   doctor: Doctor
   date: string
   time: string
-  userId: string // ✅ NEW: associate user with appointment
+  userId: string
 }
 
 interface BookingStore {
@@ -29,14 +50,18 @@ interface BookingStore {
   setTime: (time: string) => void
   addAppointment: (appointment: Appointment) => void
   resetBooking: () => void
+  getCurrentBookingInfo: () => { doctorId: string | null, doctorName: string | null }
 }
 
-export const useBookingStore = create<BookingStore>((set) => ({
+export const useBookingStore = create<BookingStore>((set, get) => ({
   selectedDoctor: null,
   selectedDate: '',
   selectedTime: '',
   appointments: [],
-  setDoctor: (doctor) => set({ selectedDoctor: doctor }),
+  setDoctor: (doctor) => {
+    console.log('🔍 BookingStore - Setting doctor:', doctor.name, 'with ID:', doctor.id)
+    set({ selectedDoctor: doctor })
+  },
   setDate: (date) => set({ selectedDate: date }),
   setTime: (time) => set({ selectedTime: time }),
   addAppointment: (appointment) =>
@@ -49,4 +74,11 @@ export const useBookingStore = create<BookingStore>((set) => ({
       selectedDate: '',
       selectedTime: '',
     }),
+  getCurrentBookingInfo: () => {
+    const state = get()
+    return {
+      doctorId: state.selectedDoctor?.id || null,
+      doctorName: state.selectedDoctor?.name || null
+    }
+  }
 }))
