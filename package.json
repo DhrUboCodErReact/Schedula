@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fullcalendar/core": "^5.11.3",
+    "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^5.11.3",
     "@fullcalendar/interaction": "^5.11.5",
-    "@fullcalendar/react": "^5.11.3",
+    "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^5.11.5",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",

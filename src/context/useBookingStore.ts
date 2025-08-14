@@ -2,23 +2,24 @@ import { create } from 'zustand'
 
 // Define AppointmentSlot interface if you need it
 interface AppointmentSlot {
-  id: string
-  date: string
-  startTime: string
-  endTime: string
-  slotDuration: number
-  totalSlots: number
-  bookedSlots: string[]
-  slotType: 'wave' | 'stream'
-  maxPatients?: number
-  availableSlots?: string[]
-  dayOfWeek?: string
-  isActive?: boolean
-  createdAt?: string
-  updatedAt?: string
-  isRecurring?: boolean
-  recurringWeeks?: number
+  id: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  slotDuration: number;
+  totalSlots: number;
+  bookedSlots: string[];
+  slotType: 'wave' | 'stream';
+  maxPatients: number;
+  availableSlots: string[];
+  dayOfWeek: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  isRecurring: boolean;
+  recurringWeeks: number;
 }
+
 
 type Doctor = {
   id: string // String for consistency with your API
