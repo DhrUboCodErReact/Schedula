@@ -108,14 +108,14 @@ const AnalyticsModal: React.FC<AnalyticsModalProps> = ({
     setLoading(true);
     try {
       // Fetch current doctor data
-      const doctorResponse = await fetch(`http://localhost:3001/doctors/${doctorId}`);
+      const doctorResponse = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/doctors/${doctorId}`);
       if (!doctorResponse.ok) {
         throw new Error("Failed to fetch doctor data");
       }
       const doctor: Doctor = await doctorResponse.json();
 
       // Fetch all doctors for comparison
-      const allDoctorsResponse = await fetch("http://localhost:3001/doctors");
+      const allDoctorsResponse = await fetch("https://mock-api-schedula-1-xzbk.onrender.com/doctors");
       if (!allDoctorsResponse.ok) {
         throw new Error("Failed to fetch comparison data");
       }

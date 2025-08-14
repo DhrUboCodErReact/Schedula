@@ -160,7 +160,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ currentUserId }
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
 
   // API base URL - adjust according to your setup
-  const API_BASE_URL: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  const API_BASE_URL: string = process.env.NEXT_PUBLIC_API_URL || 'https://mock-api-schedula-1-xzbk.onrender.com';
 
   // Fetch data from API endpoints with proper error handling
   const fetchAppointments = async (): Promise<Appointment[]> => {

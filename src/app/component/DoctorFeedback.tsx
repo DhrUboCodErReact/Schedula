@@ -84,9 +84,9 @@ const DoctorFeedback: React.FC<DoctorFeedbackProps> = ({ doctorId }) => {
       
       // Fetch all data in parallel
       const [doctorResponse, usersResponse, appointmentsResponse] = await Promise.all([
-        fetch(`http://localhost:3001/doctors/${doctorId}`),
-        fetch("http://localhost:3001/users"),
-        fetch("http://localhost:3001/appointments")
+        fetch(`https://mock-api-schedula-1-xzbk.onrender.com/doctors/${doctorId}`),
+        fetch("https://mock-api-schedula-1-xzbk.onrender.com/users"),
+        fetch("https://mock-api-schedula-1-xzbk.onrender.com/appointments")
       ]);
 
       if (!doctorResponse.ok) throw new Error("Failed to fetch doctor data");

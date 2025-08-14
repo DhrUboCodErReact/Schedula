@@ -96,8 +96,8 @@ export default function DoctorAppointmentsPage() {
     const fetchAppointmentsAndUsers = async () => {
       try {
         const [appointmentsRes, usersRes] = await Promise.all([
-          fetch("http://localhost:3001/appointments"),
-          fetch("http://localhost:3001/users"),
+          fetch("https://mock-api-schedula-1-xzbk.onrender.com/appointments"),
+          fetch("https://mock-api-schedula-1-xzbk.onrender.com/users"),
         ]);
 
         const appointmentsData: Appointment[] = await appointmentsRes.json();
@@ -130,7 +130,7 @@ export default function DoctorAppointmentsPage() {
     } else {
       // Just mark as completed without prescription
       try {
-        const res = await fetch(`http://localhost:3001/appointments/${id}`, {
+        const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/appointments/${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: "completed" }),
@@ -152,7 +152,7 @@ export default function DoctorAppointmentsPage() {
     if (!doctor?.id) return;
 
     try {
-      const appointmentsRes = await fetch("http://localhost:3001/appointments");
+      const appointmentsRes = await fetch("https://mock-api-schedula-1-xzbk.onrender.com/appointments");
       const appointmentsData: Appointment[] = await appointmentsRes.json();
 
       const doctorAppointments = appointmentsData

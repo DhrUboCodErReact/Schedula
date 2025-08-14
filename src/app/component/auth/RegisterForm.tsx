@@ -25,7 +25,7 @@ export default function RegisterForm() {
     e.preventDefault()
 
     try {
-      const existingRes = await fetch('http://localhost:3001/users')
+      const existingRes = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/users')
       const users = await existingRes.json()
 
       const alreadyExists = users.some(
@@ -49,7 +49,7 @@ export default function RegisterForm() {
         prescriptions: [],
       }
 
-      const res = await fetch('http://localhost:3001/users', {
+      const res = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newUser),

@@ -14,8 +14,8 @@ export default function DoctorDashboardPage() {
     const fetchAppointmentsAndUsers = async () => {
       try {
         const [appointmentsRes, usersRes] = await Promise.all([
-          fetch('http://localhost:3001/appointments'),
-          fetch('http://localhost:3001/users'),
+          fetch('https://mock-api-schedula-1-xzbk.onrender.com/appointments'),
+          fetch('https://mock-api-schedula-1-xzbk.onrender.com/users'),
         ])
 
         const appointmentsData = await appointmentsRes.json()

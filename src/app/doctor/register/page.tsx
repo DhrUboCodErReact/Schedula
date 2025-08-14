@@ -46,7 +46,7 @@ export default function DoctorRegisterForm() {
     if (!/^\+?[0-9]{10,15}$/.test(formData.phone)) return toast.error('Invalid phone number')
 
     try {
-      const res = await fetch('http://localhost:3001/doctors')
+      const res = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors')
       const doctors = await res.json()
 
       const exists = doctors.some(
@@ -58,7 +58,7 @@ export default function DoctorRegisterForm() {
         return
       }
 
-      const createRes = await fetch('http://localhost:3001/doctors', {
+      const createRes = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   // This is where you'd send it to your mock API server (e.g., json-server)
   // Assuming mock API is running on http://localhost:3001/users
 
-  const res = await fetch('http://localhost:3001/users', {
+  const res = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

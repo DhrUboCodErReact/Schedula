@@ -28,7 +28,7 @@ export default function DashboardPage() {
       return
     }
 
-    fetch('http://localhost:3001/doctors')
+    fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors')
       .then((res) => res.json())
       .then((data) => {
         setDoctors(data)

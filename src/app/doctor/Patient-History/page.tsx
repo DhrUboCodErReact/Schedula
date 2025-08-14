@@ -76,17 +76,17 @@ const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#F97316'
 // API Service
 const apiService = {
   async fetchUsers(): Promise<Patient[]> {
-    const response = await fetch('http://localhost:3001/users');
+    const response = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/users');
     const data = await response.json();
     return data.users || data;
   },
   async fetchDoctors(): Promise<Doctor[]> {
-    const response = await fetch('http://localhost:3001/doctors');
+    const response = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors');
     const data = await response.json();
     return data.doctors || data;
   },
   async fetchAppointments(): Promise<Appointment[]> {
-    const response = await fetch('http://localhost:3001/appointments');
+    const response = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/appointments');
     const data = await response.json();
     return data.appointments || data;
   }

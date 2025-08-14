@@ -154,7 +154,7 @@ const [newEmergencyContact, setNewEmergencyContact] = useState<Partial<Emergency
       const updatedDocs = [...(user.healthDocuments || []), newDoc]
       const updatedUser = { ...user, healthDocuments: updatedDocs }
 
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),
@@ -189,9 +189,9 @@ const [newEmergencyContact, setNewEmergencyContact] = useState<Partial<Emergency
   const fetchAllData = async () => {
     try {
       const [userRes, appointmentsRes, doctorsRes] = await Promise.all([
-        fetch(`http://localhost:3001/users/${userId}`),
-        fetch(`http://localhost:3001/appointments?userId=${userId}`),
-        fetch('http://localhost:3001/doctors')
+        fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users/${userId}`),
+        fetch(`https://mock-api-schedula-1-xzbk.onrender.com/appointments?userId=${userId}`),
+        fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors')
       ])
 
       const userData = await userRes.json()
@@ -229,7 +229,7 @@ const [newEmergencyContact, setNewEmergencyContact] = useState<Partial<Emergency
   const handleUpdate = async () => {
     if (!user) return
     try {
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
@@ -264,7 +264,7 @@ const [newEmergencyContact, setNewEmergencyContact] = useState<Partial<Emergency
     const updatedUser = { ...user, testReports: updatedReports }
 
     try {
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),
@@ -297,7 +297,7 @@ const [newEmergencyContact, setNewEmergencyContact] = useState<Partial<Emergency
     const updatedUser = { ...user, emergencyContacts: updatedContacts }
 
     try {
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),

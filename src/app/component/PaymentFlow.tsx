@@ -151,7 +151,7 @@ export default function PaymentFlow({
         amount: selectedDoctor.price
       }
 
-      const response = await fetch('http://localhost:3001/appointments', {
+      const response = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/appointments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

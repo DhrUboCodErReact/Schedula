@@ -54,7 +54,7 @@ export default function DoctorProfilePage() {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await fetch("http://localhost:3001/appointments");
+        const response = await fetch("https://mock-api-schedula-1-xzbk.onrender.com/appointments");
         if (response.ok) {
           const appointmentsData = await response.json();
           setAppointments(appointmentsData);
@@ -356,7 +356,7 @@ export default function DoctorProfilePage() {
         JSON.stringify(updateData, null, 2)
       );
 
-      const res = await fetch(`http://localhost:3001/doctors/${formData.id}`, {
+      const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/doctors/${formData.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateData),

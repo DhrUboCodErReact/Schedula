@@ -176,7 +176,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     try {
       // Get current doctor data to update the rating
       const response = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch doctor data");
@@ -206,7 +206,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       // Update doctor with new review and rating
       const updateResponse = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`,
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`,
         {
           method: "PATCH",
           headers: {
@@ -269,7 +269,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     try {
       // Get current doctor data
       const response = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch doctor data");
@@ -296,7 +296,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       // Update doctor with edited review and new rating
       const updateResponse = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`,
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`,
         {
           method: "PATCH",
           headers: {
@@ -348,7 +348,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     try {
       // Get current doctor data
       const response = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch doctor data");
@@ -370,7 +370,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       // Update doctor with removed review and new rating
       const updateResponse = await fetch(
-        `http://localhost:3001/doctors/${appointment.doctorId}`,
+        `https://mock-api-schedula-1-xzbk.onrender.com/doctors/${appointment.doctorId}`,
         {
           method: "PATCH",
           headers: {

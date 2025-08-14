@@ -40,7 +40,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const res = await fetch('http://localhost:3001/users', {
+      const res = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/users', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

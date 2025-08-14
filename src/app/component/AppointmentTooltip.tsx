@@ -35,7 +35,7 @@ export const AppointmentTooltip: React.FC<TooltipProps> = ({
     
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/users`);
+      const response = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/users`);
       if (response.ok) {
         const users = await response.json();
         const foundUser = users.find((u: User) => u.id === userId);

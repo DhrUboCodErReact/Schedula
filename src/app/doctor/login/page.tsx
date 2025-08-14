@@ -18,7 +18,7 @@ export default function DoctorLogin() {
     e.preventDefault()
 
     try {
-      const res = await fetch('http://localhost:3001/doctors')
+      const res = await fetch('https://mock-api-schedula-1-xzbk.onrender.com/doctors')
       const doctors = await res.json()
 
       const doctor = doctors.find(
