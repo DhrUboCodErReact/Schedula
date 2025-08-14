@@ -405,38 +405,39 @@ export default function AppointmentCalendar({
           {/* Calendar */}
           <div className="rounded-2xl border-2 border-gray-100 shadow-lg p-6 bg-gradient-to-br from-gray-50 to-white">
             <FullCalendar
-              plugins={[timeGridPlugin, interactionPlugin]}
-              initialView="timeGridWeek"
-              height="auto"
-              editable={true}
-              selectable={false}
-              events={events}
-              eventDrop={handleEventDrop}
-              eventContent={renderEventContent}
-              eventClick={handleEventClick}
-              eventStartEditable={true}
-              eventDurationEditable={false}
-              slotMinTime="00:00:00"
-              slotMaxTime="23:59:59"
-              slotDuration="00:30:00"
-              snapDuration="00:15:00"
-              allDaySlot={false}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'timeGridDay,timeGridWeek',
-              }}
-              buttonText={{
-                today: '🏠 Today',
-                timeGridDay: '📋 Day',
-                timeGridWeek: '📅 Week',
-              }}
-              dayHeaderClassNames={() =>
-                'bg-gradient-to-r from-indigo-50 to-purple-50 text-gray-800 text-sm font-semibold py-3 border-b-2 border-indigo-100'
-              }
-              slotLabelClassNames={() => 'text-xs text-gray-500 font-medium'}
-              eventClassNames={() => 'hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md'}
-              businessHours={false}
+              {...{
+                plugins: [timeGridPlugin as any, interactionPlugin as any],
+                initialView: "timeGridWeek",
+                height: "auto",
+                editable: true,
+                selectable: false,
+                events: events,
+                eventDrop: handleEventDrop,
+                eventContent: renderEventContent,
+                eventClick: handleEventClick,
+                eventStartEditable: true,
+                eventDurationEditable: false,
+                slotMinTime: "00:00:00",
+                slotMaxTime: "23:59:59",
+                slotDuration: "00:30:00",
+                snapDuration: "00:15:00",
+                allDaySlot: false,
+                headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'timeGridDay,timeGridWeek',
+                },
+                buttonText: {
+                  today: '🏠 Today',
+                  timeGridDay: '📋 Day',
+                  timeGridWeek: '📅 Week',
+                },
+                dayHeaderClassNames: () =>
+                  'bg-gradient-to-r from-indigo-50 to-purple-50 text-gray-800 text-sm font-semibold py-3 border-b-2 border-indigo-100',
+                slotLabelClassNames: () => 'text-xs text-gray-500 font-medium',
+                eventClassNames: () => 'hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md',
+                businessHours: false,
+              } as any}
             />
           </div>
         </div>
