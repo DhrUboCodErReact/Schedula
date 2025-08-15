@@ -103,8 +103,8 @@ export default function AppointmentCalendar({
     const fetchData = async () => {
       try {
         const [appointmentsRes, usersRes] = await Promise.all([
-          fetch('http://localhost:3001/appointments'),
-          fetch('http://localhost:3001/users'),
+          fetch('https://mock-api-schedula-1-xzbk.onrender.com/appointments'),
+          fetch('https://mock-api-schedula-1-xzbk.onrender.com/users'),
         ]);
 
         const appointmentsData = await appointmentsRes.json();
@@ -195,7 +195,7 @@ export default function AppointmentCalendar({
           }
 
           const res = await fetch(
-            `http://localhost:3001/appointments/${appointment.id}`,
+            `https://mock-api-schedula-1-xzbk.onrender.com/appointments/${appointment.id}`,
             {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
@@ -242,7 +242,7 @@ export default function AppointmentCalendar({
       type: 'danger',
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://localhost:3001/appointments/${appointmentId}`, {
+          const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/appointments/${appointmentId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'cancelled' }),
