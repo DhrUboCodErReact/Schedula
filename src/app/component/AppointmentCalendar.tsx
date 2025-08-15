@@ -4,7 +4,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-// Import FullCalendar core first, then plugins
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -12,7 +11,7 @@ import { parseISO, isBefore } from 'date-fns';
 import { ToastContainer, ToastNotification } from './ToastNotification';
 import { ConfirmationModal } from './ConfirmationModal';
 import { AppointmentDetailsModal } from './AppointmentDetailsModal';
-import { AppointmentTooltip } from './AppointmentTooltip';
+import { AppointmentTooltip } from './AppointmentTooltip'; // Add this import
 import { StatisticsGrid } from './StatisticsGrid';
 import { CalendarInstructions } from './CalendarInstructions';
 import { formatTime, getStatusIcon } from './utils';
