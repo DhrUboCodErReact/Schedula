@@ -103,8 +103,8 @@ export default function AppointmentCalendar({
     const fetchData = async () => {
       try {
         const [appointmentsRes, usersRes] = await Promise.all([
-          fetch('https://mock-api-schedula-1-xzbk.onrender.com/appointments'),
-          fetch('https://mock-api-schedula-1-xzbk.onrender.com/users'),
+          fetch('http://localhost:3001/appointments'),
+          fetch('http://localhost:3001/users'),
         ]);
 
         const appointmentsData = await appointmentsRes.json();
@@ -195,7 +195,7 @@ export default function AppointmentCalendar({
           }
 
           const res = await fetch(
-            `https://mock-api-schedula-1-xzbk.onrender.com/appointments/${appointment.id}`,
+            `http://localhost:3001/appointments/${appointment.id}`,
             {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
@@ -242,7 +242,7 @@ export default function AppointmentCalendar({
       type: 'danger',
       onConfirm: async () => {
         try {
-          const res = await fetch(`https://mock-api-schedula-1-xzbk.onrender.com/appointments/${appointmentId}`, {
+          const res = await fetch(`http://localhost:3001/appointments/${appointmentId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'cancelled' }),
@@ -405,39 +405,38 @@ export default function AppointmentCalendar({
           {/* Calendar */}
           <div className="rounded-2xl border-2 border-gray-100 shadow-lg p-6 bg-gradient-to-br from-gray-50 to-white">
             <FullCalendar
-              {...{
-                plugins: [timeGridPlugin as any, interactionPlugin as any],
-                initialView: "timeGridWeek",
-                height: "auto",
-                editable: true,
-                selectable: false,
-                events: events,
-                eventDrop: handleEventDrop,
-                eventContent: renderEventContent,
-                eventClick: handleEventClick,
-                eventStartEditable: true,
-                eventDurationEditable: false,
-                slotMinTime: "00:00:00",
-                slotMaxTime: "23:59:59",
-                slotDuration: "00:30:00",
-                snapDuration: "00:15:00",
-                allDaySlot: false,
-                headerToolbar: {
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'timeGridDay,timeGridWeek',
-                },
-                buttonText: {
-                  today: '🏠 Today',
-                  timeGridDay: '📋 Day',
-                  timeGridWeek: '📅 Week',
-                },
-                dayHeaderClassNames: () =>
-                  'bg-gradient-to-r from-indigo-50 to-purple-50 text-gray-800 text-sm font-semibold py-3 border-b-2 border-indigo-100',
-                slotLabelClassNames: () => 'text-xs text-gray-500 font-medium',
-                eventClassNames: () => 'hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md',
-                businessHours: false,
-              } as any}
+              plugins={[timeGridPlugin, interactionPlugin]}
+              initialView="timeGridWeek"
+              height="auto"
+              editable={true}
+              selectable={false}
+              events={events}
+              eventDrop={handleEventDrop}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+              eventStartEditable={true}
+              eventDurationEditable={false}
+              slotMinTime="00:00:00"
+              slotMaxTime="23:59:59"
+              slotDuration="00:30:00"
+              snapDuration="00:15:00"
+              allDaySlot={false}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridDay,timeGridWeek',
+              }}
+              buttonText={{
+                today: '🏠 Today',
+                timeGridDay: '📋 Day',
+                timeGridWeek: '📅 Week',
+              }}
+              dayHeaderClassNames={() =>
+                'bg-gradient-to-r from-indigo-50 to-purple-50 text-gray-800 text-sm font-semibold py-3 border-b-2 border-indigo-100'
+              }
+              slotLabelClassNames={() => 'text-xs text-gray-500 font-medium'}
+              eventClassNames={() => 'hover:scale-105 transition-transform duration-200 cursor-pointer shadow-md'}
+              businessHours={false}
             />
           </div>
         </div>
