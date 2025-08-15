@@ -362,7 +362,7 @@ export default function SchedulaHealthLanding() {
   }
 
   const handleBookAppointment = () => {
-    window.location.href = 'http://localhost:3000/register'
+    window.location.href = 'https://schedula-k6ws.vercel.app/register'
   }
 
   const handleSubscribe = (planId: string) => {
@@ -408,7 +408,7 @@ export default function SchedulaHealthLanding() {
               {/* Login CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <a 
-                  href="http://localhost:3000/login"
+                  href="https://schedula-k6ws.vercel.app/login"
                   className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl transition-all duration-300 text-lg shadow-lg hover:shadow-xl flex items-center justify-center gap-3 hover:scale-[1.02] transform overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
@@ -423,7 +423,7 @@ export default function SchedulaHealthLanding() {
                 </a>
                 
                 <a 
-                  href="http://localhost:3000/doctor/login"
+                  href="https://schedula-k6ws.vercel.app/doctor/login"
                   className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 text-lg shadow-lg hover:shadow-xl flex items-center justify-center gap-3 hover:scale-[1.02] transform overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
